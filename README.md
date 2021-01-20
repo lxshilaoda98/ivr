@@ -1,22 +1,5 @@
 # easy-flow
 
-## 演示地址
-> 感谢码云平台给了一个免费的Gitee Pages服务, 可能访问有点慢
-
-[演示地址](http://xiaoka2017.gitee.io/easy-flow/#?_blank)
-
-## 效果图
-
-![](https://gitee.com/xiaoka2017/resource/raw/master/easy-flow/2.2.0/1.png)
-
-
-
-![](https://gitee.com/xiaoka2017/resource/raw/master/easy-flow/2.3.0/3.jpg)
-
-
-
-![](https://gitee.com/xiaoka2017/resource/raw/master/easy-flow/2.2.0/2.png)
-
 
 
 
@@ -236,18 +219,6 @@ npm run dev
 # 访问地址
  http://localhost:8080
 ```
-
-## github
-https://github.com/BiaoChengLiu/easy-flow
-
-## 码云
-https://gitee.com/xiaoka2017/easy-flow
-
-## 交流群
-
-QQ群：534446043
-
-![avatar](https://gitee.com/xiaoka2017/resource/raw/master/easy-flow/qrcode_1575887795029.jpg)
 
 ## 协议
 符合项目package.json中使用的插件中规定的协议即可
