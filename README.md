@@ -1,7 +1,8 @@
 # easy-flow
 
 
-
+## 教程地址
+https://github.com/wangduanduan/jsplumb-chinese-tutorial#1-jsplumb-%E4%B8%AD%E6%96%87%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B
 
 
 ## 项目介绍
