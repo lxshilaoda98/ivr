@@ -95,6 +95,19 @@
         </el-form>
 
         <el-form :model="musicNode" ref="dataForm" label-width="100px" v-show="type === 'music'">
+          <el-form-item>
+          <el-upload
+            class="upload-demo"
+
+            action="http://62.234.131.99:8000/file/upload"
+            :on-change="handleChange"
+            :file-list="fileList"
+            accept=".wav,.mp3"
+            :before-upload="GetFileSize">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传wav文件，且不超过10MB</div>
+          </el-upload>
+          </el-form-item>
 
           <el-form-item>
             <el-button type="primary" icon="el-icon-check" @click="saveLine">保存</el-button>
