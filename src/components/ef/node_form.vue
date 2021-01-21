@@ -127,6 +127,7 @@ const cityOptions = ['周一', '周二', '周三', '周四','周五','周六','�
 export default {
   data() {
     return {
+
       checkedCities: ['周一', '周二', '周三', '周四','周五'],
       cities: cityOptions,
       visible: true,
@@ -165,6 +166,9 @@ export default {
     }
   },
   methods: {
+    handleChange(){
+
+    },
     /**
      * 表单修改，这里可以根据传入的ID进行业务信息获取
      * @param data
