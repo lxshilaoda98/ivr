@@ -15,9 +15,9 @@
           <el-divider direction="vertical"></el-divider>
           <el-button type="text" icon="el-icon-minus" size="large" @click="zoomSub"></el-button>
           <div style="float: right;margin-right: 5px">
+            <el-button type="primary"  @click="saveInfo" size="mini">保存流程</el-button>
             <el-button type="info" plain round icon="el-icon-document" @click="dataInfo" size="mini">流程信息</el-button>
-            <el-button type="primary" plain round @click="dataReloadA" icon="el-icon-refresh" size="mini">电话流程
-            </el-button>
+            <el-button type="primary" plain round @click="dataReloadA" icon="el-icon-refresh" size="mini">电话流程</el-button>
             <!--                        <el-button type="primary" plain round @click="dataReloadB" icon="el-icon-refresh" size="mini">切换流程B</el-button>-->
             <!--                        <el-button type="primary" plain round @click="dataReloadC" icon="el-icon-refresh" size="mini">切换流程C</el-button>-->
             <!--                        <el-button type="primary" plain round @click="dataReloadD" icon="el-icon-refresh" size="mini">自定义样式</el-button>-->
@@ -78,6 +78,8 @@ import {getDataC} from './data_C'
 import {getDataD} from './data_D'
 import {getDataE} from './data_E'
 import {ForceDirected} from './force-directed'
+
+import {saveModel} from './saveApi'
 
 export default {
   data() {
@@ -454,6 +456,32 @@ export default {
     },
     repaintEverything() {
       this.jsPlumb.repaint()
+    },
+    //保存流程
+    saveInfo(){
+      let id =window.location.pathname.split('/')[1].toString();
+      let params ={
+          "id":id,
+          "sJson":this.data
+      }
+      saveModel(params).then((result) => {
+        if (result.code == "20000") {
+          this.$notify({
+            title: '成功',
+            message: '创建成功',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$notify({
+            title: '失败',
+            message: '创建失败' + result.msg,
+            type: 'error',
+            duration: result.code
+          })
+        }
+      })
+
     },
     // 流程数据信息
     dataInfo() {

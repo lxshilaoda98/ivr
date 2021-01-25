@@ -47,12 +47,12 @@ let dataA = {
       "state": "success"
     },
     {
-      "id": "dlqbtbscdw",
-      "name": "转人工1",
-      "type": "agent",
-      "left": "313px",
-      "top": "646px",
-      "ico": "el-icon-user",
+      "id": "bfflib2mek",
+      "name": "转组",
+      "type": "group",
+      "left": "291px",
+      "top": "650px",
+      "ico": "el-icon-files",
       "state": "success"
     }
   ],
@@ -77,7 +77,7 @@ let dataA = {
     },
     {
       "from": "wgv30ph1ps",
-      "to": "dlqbtbscdw"
+      "to": "bfflib2mek"
     }
   ]
 }

@@ -53,18 +53,32 @@ export default {
               ico: 'el-icon-thumb',
               // 自定义覆盖样式
               style: {}
-            }, {
+            },{
               id: '12',
+              type: 'offTime',
+              name: '工作时间',
+              ico: 'el-icon-time',
+              // 自定义覆盖样式
+              style: {}
+            }, {
+              id: '13',
               type: 'music',
               name: '播放音乐',
               ico: 'el-icon-video-play',
               // 自定义覆盖样式
               style: {}
             }, {
-              id: '13',
+              id: '14',
               type: 'agent',
               name: '转人工',
               ico: 'el-icon-user',
+              // 自定义覆盖样式
+              style: {}
+            }, {
+              id: '15',
+              type: 'group',
+              name: '转组',
+              ico: 'el-icon-files',
               // 自定义覆盖样式
               style: {}
             }
@@ -100,13 +114,6 @@ export default {
               type: 'httpApi',
               name: '接口调用',
               ico: 'el-icon-sort',
-              // 自定义覆盖样式
-              style: {}
-            },{
-              id: '32',
-              type: 'offTime',
-              name: '工作时间',
-              ico: 'el-icon-time',
               // 自定义覆盖样式
               style: {}
             }
