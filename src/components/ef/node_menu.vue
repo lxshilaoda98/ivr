@@ -85,23 +85,7 @@ export default {
 
           ]
         },
-        {
-          id: '2',
-          type: 'group',
-          name: '结束节点',
-          ico: 'el-icon-video-pause',
-          open: true,
-          children: [
-            {
-              id: '21',
-              type: 'end',
-              name: '流程结束',
-              ico: 'el-icon-wind-power',
-              // 自定义覆盖样式
-              style: {}
-            }
-          ]
-        },
+
         {
           id: '3',
           type: 'group',

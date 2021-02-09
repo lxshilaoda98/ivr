@@ -1,5 +1,5 @@
 {
-  "name": "easy-flow",
+  "name": "IVR",
   "description": "简单易用的流程图",
   "author": "lixin",
   "private": false,
@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "element-ui": "2.9.1",
     "lodash": "4.17.15",
+    "moment": "^2.29.1",
     "vue": "^2.5.2",
     "vue-codemirror": "^4.0.6",
     "vuedraggable": "2.23.0"
