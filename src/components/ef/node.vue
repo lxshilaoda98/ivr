@@ -42,7 +42,7 @@
                     'ef-node-active': this.activeElement.type == 'node' ? this.activeElement.nodeId === this.node.id : false
                 }
             },
-            // 节点容器样式
+            // 节点容器样式a
             nodeContainerStyle() {
                 return {
                     top: this.node.top,
