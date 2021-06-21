@@ -83,7 +83,7 @@
               :on-success="dwSuccess"
               :on-remove="rmSuccess"
               class="upload-demo"
-              action="http://62.234.131.99:8000/file/upload"
+              action="http://39.97.233.183:8000/file/upload"
               :on-change="handleChange"
               :file-list="musicNode.fileList"
               accept=".wav,.mp3"
@@ -311,6 +311,8 @@
                 "type":node.type
               }
               GetViewsType(params).then((result) => {
+                console.log("返回数据为:");
+                console.log(result);
                 if (result.code == "20000") {
                   if(node.type =="offTime"){
                       if(result.nodeList.Oid!=""){

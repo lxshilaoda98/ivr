@@ -3,7 +3,6 @@
  */
 import request from './request_utils'
 
-
 export function GetIvrModel(query) {
   return request({
     url: '/GetIvrModel',
