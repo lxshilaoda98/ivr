@@ -78,23 +78,45 @@
         </el-form>
 
         <el-form :model="musicNode" ref="dataForm" label-width="100px" v-show="type === 'music'">
+          <el-form-item label="名称">
+            <el-input v-model="musicNode.Title"></el-input>
+          </el-form-item>
           <el-form-item label="选择语音文件">
             <el-upload
               :on-success="dwSuccess"
               :on-remove="rmSuccess"
               class="upload-demo"
-              action="http://39.97.233.183:8000/file/upload"
+              action="http://127.0.0.1:8000/file/upload"
               :on-change="handleChange"
               :file-list="musicNode.fileList"
-              accept=".wav,.mp3"
+              accept=".mp3"
               :before-upload="GetFileSize">
               <el-button size="small" type="primary">点击上传</el-button>
               <div slot="tip" class="el-upload__tip">只能上传wav文件，且不超过10MB</div>
             </el-upload>
           </el-form-item>
 
-          <el-form-item label="名称">
-            <el-input v-model="node.name"></el-input>
+          <el-form-item label="播放的录音">
+            <el-select v-model="musicNode.SuccWav" placeholder="请选择">
+              <el-option
+                v-for="item in musicNode.fileList"
+                :key="item.url"
+                :label="item.name"
+                :value="item.url">
+              </el-option>
+            </el-select>
+            <el-button type="primary" icon="el-icon-video-play" @click="playMusic(musicNode.SuccWav)"></el-button>
+          </el-form-item>
+          <el-form-item label="按键错误录音">
+            <el-select v-model="musicNode.ErrWav" placeholder="请选择">
+              <el-option
+                v-for="item in musicNode.fileList"
+                :key="item.url"
+                :label="item.name"
+                :value="item.url">
+              </el-option>
+            </el-select>
+            <el-button type="primary" icon="el-icon-video-play" @click="playMusic(musicNode.ErrWav)"></el-button>
           </el-form-item>
 
           <el-form-item label="最小位数">
@@ -185,6 +207,48 @@
           </el-form-item>
         </el-form>
 
+        <el-form :model="httpApiNode" ref="dataForm" label-width="100px" v-show="type === 'httpApi'">
+
+          <el-form-item label="名称">
+            <el-input v-model="httpApiNode.name"></el-input>
+          </el-form-item>
+          <el-form-item label="接口地址">
+            <el-input v-model="httpApiNode.url"></el-input>
+          </el-form-item>
+          <el-form-item label="请求方法">
+            <el-input v-model="httpApiNode.method"></el-input>
+          </el-form-item>
+          <el-form-item label="请求参数">
+            <el-table :data="httpApiNode.dataForm.paramList" size="mini">
+              <el-table-column prop="paramkey" label="key" width="100">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.paramkey"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="paramvalue" label="value">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.paramvalue"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="50">
+                <template slot-scope="scope">
+                  <el-button size="mini" type="text"
+                             @click="handleDelIcrmWorktimeoverrideEntityList(scope.$index)"
+                  >删除
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-form-item>
+
+          <div  @click="addHandleIcrmWorktimeoverrideEntityList()">
+            <el-button type="text" icon="el-icon-plus">新增参数</el-button>
+          </div>
+
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-check" @click="save('httpApi')">保存</el-button>
+          </el-form-item>
+        </el-form>
 
       </div>
 
@@ -203,6 +267,7 @@
   export default {
     data() {
       return {
+        GoHTTPUrl:'http://127.0.0.1:8000/file/playMusic', //播放语音的地址
         Kxoptions:['1','2','3','4','5','6','7','8','9','0','*','#'],
         SelectCheck1: isOptions,
         SelectCheck2: errOptions,
@@ -226,9 +291,10 @@
           Time4: null,
           Time5: null,
         },
-        musicNode: {Min:'1',Max:'1',Name:'1',Timeout:'5000',Terminators:'#',IsCheck:'是'},
+        musicNode: {Title:'',Min:'1',Max:'1',Name:'1',Timeout:'5000',Terminators:'#',IsCheck:'是',ErrWav:'',SuccWav:''},
         agentNode: {},
         groupNode: {},
+        httpApiNode:{name:'接口调用',method:'get',url:'http://127.0.0.1',dataForm:{paramList:[],paramkey:'',paramvalue:''}},
         stateList: [{
           state: 'success',
           label: '成功'
@@ -245,6 +311,23 @@
       }
     },
     methods: {
+      playMusic(val){
+        val=this.GoHTTPUrl+"?musicFile="+val;
+        // <audio src="../viper.mp3" controls="controls"></audio>
+        this.$alert('<audio src="'+val+'" controls="controls"></audio> ', '试听', {
+          dangerouslyUseHTMLString: true
+        });
+      },
+      handleDelIcrmWorktimeoverrideEntityList(index) {
+        this.httpApiNode.dataForm.paramList.splice(index, 1)
+      },
+      addHandleIcrmWorktimeoverrideEntityList() {
+        let item = {
+          paramkey: undefined,
+          paramvalue: undefined,
+        }
+        this.httpApiNode.dataForm.paramList.push(item);
+      },
       //上传文件成功后方法
       dwSuccess(response,file){
         //成功后修改数据库存储的数据
@@ -262,7 +345,6 @@
             }
           })
         }
-
       },
       //移除文件方法
       rmSuccess(file){
@@ -282,12 +364,13 @@
       },
       GetFileSize(file){
         const isLt2M = file.size / 1024 / 1024 < 10;
-        const isJPG = file.type === 'audio/wav';
+        console.log(file.type)
+        const isJPG = file.type === 'audio/mpeg';
         if (!isLt2M) {
           this.$message.error('上传的文件不能超过 10MB!');
         }
         if (!isJPG) {
-          this.$message.error('格式错误,只能是wav文件!');
+          this.$message.error('格式错误,只能是mp3文件!');
         }
         return isJPG && isLt2M;
       },
@@ -311,25 +394,30 @@
                 "type":node.type
               }
               GetViewsType(params).then((result) => {
-                console.log("返回数据为:");
-                console.log(result);
                 if (result.code == "20000") {
                   if(node.type =="offTime"){
                       if(result.nodeList.Oid!=""){
                         this.offTimeNode=result.nodeList
                       }
-
                   }else if(node.type =="music"){
                     if(result.nodeList.Oid!=""){
+                      node.name=result.nodeList.Title;
                       this.musicNode=result.nodeList
                       this.musicNode.fileList = result.nodeList.DataList
+                    }else{
+                      this.musicNode.fileList = []
                     }
 
                    // this.musicNode.fileList = [{name: 'food.jpg', url: 'https://xxx.cdn.com/xxx.jpg',uid:12312123123}]
                   }else if(node.type =="agent"){
-                    this.agentNode=result.nodeList
+                    this.agentNode=result.nodeList;
                   }else if(node.type =="group"){
-                    this.groupNode=result.nodeList
+                    this.groupNode=result.nodeList;
+                  }
+                  else if(node.type =="httpApi"){
+                    node.name=result.nodeList.name;
+
+                    this.httpApiNode=result.nodeList;
                   }
                 } else {
                   console.log("接口返回异常")
@@ -350,85 +438,36 @@
       saveLine() {
         this.$emit('setLineLabel', this.line.from, this.line.to, this.line.label)
       },
+      //保存按钮
       save(val) {
+        let param={}
         switch (val) {
           case "begin" :
             break;
           case "offTime":
-            let params = {
+            param = {
               "id": this.node.id,
               "sJson": this.offTimeNode,
               "type": val
             }
-            saveViewsType(params).then((result) => {
-              if (result.code == "20000") {
-                this.$notify({
-                  title: '成功',
-                  message: '保存成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              } else {
-                this.$notify({
-                  title: '失败',
-                  message: '保存失败' + result.msg,
-                  type: 'error',
-                  duration: result.code
-                })
-              }
-            })
             break;
           case "music":
-              console.log(this.musicNode)
-            let paramsM = {
+            param = {
               "id": this.node.id,
               "sJson": this.musicNode,
               "type": val
             }
-            saveViewsType(paramsM).then((result) => {
-              if (result.code == "20000") {
-                this.$notify({
-                  title: '成功',
-                  message: '保存成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              } else {
-                this.$notify({
-                  title: '失败',
-                  message: '保存失败' + result.msg,
-                  type: 'error',
-                  duration: result.code
-                })
-              }
-            })
+            this.node.name=this.musicNode.Title;
             break;
           case "agent":
-            let paramsAgent = {
+            param = {
               "id": this.node.id,
               "sJson": this.agentNode,
               "type": val
             }
-            saveViewsType(paramsAgent).then((result) => {
-              if (result.code == "20000") {
-                this.$notify({
-                  title: '成功',
-                  message: '保存成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              } else {
-                this.$notify({
-                  title: '失败',
-                  message: '保存失败' + result.msg,
-                  type: 'error',
-                  duration: result.code
-                })
-              }
-            })
               break;
           case "group":
-            let paramsGroup = {
+            param = {
               "id": this.node.id,
               "sJson": this.groupNode,
               "type": val
@@ -451,11 +490,35 @@
               }
             })
             break;
-          default :
-            console.log('asdasd')
+          case "httpApi":
+            param = {
+              "name": this.httpApiNode.name,
+              "id": this.node.id,
+              "sJson": this.httpApiNode,
+              "type": val
+            }
+            this.node.name=this.httpApiNode.name;
             break;
-
+          default :
+            break;
         }
+        saveViewsType(param).then((result) => {
+          if (result.code == "20000") {
+            this.$notify({
+              title: '成功',
+              message: '保存成功',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$notify({
+              title: '失败',
+              message: '保存失败' + result.msg,
+              type: 'error',
+              duration: result.code
+            })
+          }
+        })
         this.data.nodeList.filter((node) => {
           if (node.id === this.node.id) {
             node.name = this.node.name

@@ -87,7 +87,7 @@ export default {
         },
 
         {
-          id: '3',
+          id: '2',
           type: 'group',
           name: '自定义节点',
           ico: 'el-icon-video-pause',
