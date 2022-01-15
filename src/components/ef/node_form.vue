@@ -131,9 +131,32 @@
           <el-form-item label="超时">
             <el-input v-model="musicNode.Timeout"></el-input>
           </el-form-item>
-          <el-form-item label="结束符">
+          <el-form-item label="按键结束符">
             <el-input v-model="musicNode.Terminators"></el-input>
           </el-form-item>
+
+          <el-form-item label="返回上级菜单">
+            <el-select v-model="musicNode.Backmenu" placeholder="请选择">
+              <el-option
+                v-for="item in againmenus"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="重听">
+            <el-select v-model="musicNode.Againmenu" placeholder="请选择">
+              <el-option
+                v-for="item in againmenus"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
 
           <el-form-item label="可否打断">
             <el-select v-model="musicNode.IsCheck" placeholder="请选择">
@@ -198,8 +221,21 @@
 
         <el-form :model="groupNode" ref="dataForm" label-width="100px" v-show="type === 'group'">
 
+          <el-form-item label="名称">
+            <el-input v-model="groupNode.Title"></el-input>
+          </el-form-item>
+
+
+
           <el-form-item label="组信息">
-            <el-input v-model="groupNode.name"></el-input>
+            <el-select v-model="groupNode.name" placeholder="请选择">
+              <el-option
+                v-for="item in GroupList"
+                :key="item.svc_code"
+                :label="item.svc_name"
+                :value="item.svc_code">
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item>
@@ -259,18 +295,21 @@
 
 <script>
   import moment from 'moment'
-  import {saveViewsType,GetViewsType,SaveFile,RmFile} from './saveApi'
+  import {saveViewsType,GetViewsType,SaveFile,RmFile,GetIVRSvc} from './saveApi'
   import {cloneDeep} from 'lodash'
   const cityOptions = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
   const isOptions = ['是', '否'];
-  const errOptions = ['转组', '挂断']
+  const errOptions = ['转组', '挂断'];
+  const againmenus = ['#', '*'];
   export default {
     data() {
       return {
+        GroupList:[],
         GoHTTPUrl:'http://127.0.0.1:8000/file/playMusic', //播放语音的地址
         Kxoptions:['1','2','3','4','5','6','7','8','9','0','*','#'],
         SelectCheck1: isOptions,
         SelectCheck2: errOptions,
+        againmenus:againmenus,
         cities: cityOptions,
         visible: true,
         // node 或 line
@@ -291,7 +330,7 @@
           Time4: null,
           Time5: null,
         },
-        musicNode: {Title:'',Min:'1',Max:'1',Name:'1',Timeout:'5000',Terminators:'#',IsCheck:'是',ErrWav:'',SuccWav:''},
+        musicNode: {Title:'',Min:'1',Max:'1',Name:'1',Timeout:'5000',Terminators:'#',IsCheck:'是',ErrWav:'',SuccWav:'',Backmenu:'',Againmenu:''},
         agentNode: {},
         groupNode: {},
         httpApiNode:{name:'接口调用',method:'get',url:'http://127.0.0.1',dataForm:{paramList:[],paramkey:'',paramvalue:''}},
@@ -412,6 +451,8 @@
                   }else if(node.type =="agent"){
                     this.agentNode=result.nodeList;
                   }else if(node.type =="group"){
+
+                    node.name=result.nodeList.Title;
                     this.groupNode=result.nodeList;
                   }
                   else if(node.type =="httpApi"){
@@ -423,7 +464,16 @@
                   console.log("接口返回异常")
                 }
               })
+              //填充下拉框
+              GetIVRSvc().then((result) => {
+                if (result.code == "20000") {
+                  this.GroupList = result.result
+                }
+                else {
+                  console.log("接口返回异常")
+                }
 
+              })
             }
             this.node = cloneDeep(node)
 
@@ -472,23 +522,7 @@
               "sJson": this.groupNode,
               "type": val
             }
-            saveViewsType(paramsGroup).then((result) => {
-              if (result.code == "20000") {
-                this.$notify({
-                  title: '成功',
-                  message: '保存成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              } else {
-                this.$notify({
-                  title: '失败',
-                  message: '保存失败' + result.msg,
-                  type: 'error',
-                  duration: result.code
-                })
-              }
-            })
+            this.node.name=this.groupNode.Title;
             break;
           case "httpApi":
             param = {

@@ -3,6 +3,15 @@
  */
 import request from './request_utils'
 
+
+export function GetIVRSvc() {
+  return request({
+    url: '/call/getIVRSvc',
+    method: 'get'
+  })
+}
+
+
 export function GetIvrModel(query) {
   return request({
     url: '/GetIvrModel',
