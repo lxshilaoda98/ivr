@@ -68,17 +68,17 @@ export default {
               // 自定义覆盖样式
               style: {}
             }, {
-              id: '14',
-              type: 'agent',
-              name: '转人工',
-              ico: 'el-icon-user',
-              // 自定义覆盖样式
-              style: {}
-            }, {
               id: '15',
               type: 'group',
               name: '转组',
               ico: 'el-icon-files',
+              // 自定义覆盖样式
+              style: {}
+            }, {
+              id: '14',
+              type: 'agent',
+              name: '转人工',
+              ico: 'el-icon-user',
               // 自定义覆盖样式
               style: {}
             }

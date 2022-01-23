@@ -86,11 +86,13 @@
               :on-success="dwSuccess"
               :on-remove="rmSuccess"
               class="upload-demo"
-              action="http://127.0.0.1:8000/file/upload"
+              :action=this.fileUploadUrl
               :on-change="handleChange"
               :file-list="musicNode.fileList"
               accept=".mp3"
-              :before-upload="GetFileSize">
+              :before-upload="GetFileSize"
+              :data={0:this.node.id}
+            >
               <el-button size="small" type="primary">点击上传</el-button>
               <div slot="tip" class="el-upload__tip">只能上传wav文件，且不超过10MB</div>
             </el-upload>
@@ -220,13 +222,37 @@
         </el-form>
 
         <el-form :model="groupNode" ref="dataForm" label-width="100px" v-show="type === 'group'">
-
           <el-form-item label="名称">
             <el-input v-model="groupNode.Title"></el-input>
           </el-form-item>
+          <el-form-item label="选择语音文件">
+            <el-upload
+              :on-success="dwSuccess"
+              :on-remove="rmSuccess"
+              class="upload-demo"
+              :action=this.fileUploadUrl
+              :on-change="handleChange"
+              :file-list="groupNode.DataList"
+              accept=".mp3"
+              :before-upload="GetFileSize"
+              :data={0:this.node.id}
+            >
 
-
-
+              <el-button size="small" type="primary">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传wav文件，且不超过10MB</div>
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="转接前">
+            <el-select v-model="groupNode.bef_music" placeholder="请选择">
+              <el-option
+                v-for="item in groupNode.DataList"
+                :key="item.url"
+                :label="item.name"
+                :value="item.url">
+              </el-option>
+            </el-select>
+            <el-button type="primary" icon="el-icon-video-play" @click="playMusic(groupNode.bef_music)"></el-button>
+          </el-form-item>
           <el-form-item label="组信息">
             <el-select v-model="groupNode.name" placeholder="请选择">
               <el-option
@@ -304,6 +330,8 @@
   export default {
     data() {
       return {
+
+        fileUploadUrl:'http://127.0.0.1:8000/file/upload',
         GroupList:[],
         GoHTTPUrl:'http://127.0.0.1:8000/file/playMusic', //播放语音的地址
         Kxoptions:['1','2','3','4','5','6','7','8','9','0','*','#'],
@@ -403,7 +431,6 @@
       },
       GetFileSize(file){
         const isLt2M = file.size / 1024 / 1024 < 10;
-        console.log(file.type)
         const isJPG = file.type === 'audio/mpeg';
         if (!isLt2M) {
           this.$message.error('上传的文件不能超过 10MB!');
