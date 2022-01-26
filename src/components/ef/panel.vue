@@ -16,13 +16,13 @@
           <el-button type="text" icon="el-icon-minus" size="large" @click="zoomSub"></el-button>
           <div style="float: right;margin-right: 5px">
             <el-button type="primary" @click="saveInfo" size="mini">保存流程</el-button>
-            <el-button type="primary" @click="sendInfo" size="mini">写入流程</el-button>
-            <!--<el-button type="info" plain round icon="el-icon-document" @click="dataInfo" size="mini">流程信息</el-button>-->
-            <!--<el-button type="primary" plain round @click="dataReloadA" icon="el-icon-refresh" size="mini">电话流程</el-button>-->
+            <el-button type="primary" @click="sendInfo" size="mini" v-show="false">写入流程</el-button>
+<!--            <el-button type="info" plain round icon="el-icon-document" @click="dataInfo" size="mini">流程信息</el-button>-->
+<!--            <el-button type="primary" plain round @click="dataReloadA" icon="el-icon-refresh" size="mini">电话流程</el-button>-->
             <!--                        <el-button type="primary" plain round @click="dataReloadB" icon="el-icon-refresh" size="mini">切换流程B</el-button>-->
             <!--                        <el-button type="primary" plain round @click="dataReloadC" icon="el-icon-refresh" size="mini">切换流程C</el-button>-->
-            <!--                        <el-button type="primary" plain round @click="dataReloadD" icon="el-icon-refresh" size="mini">自定义样式</el-button>-->
-            <!--                        <el-button type="primary" plain round @click="dataReloadE" icon="el-icon-refresh" size="mini">力导图</el-button>-->
+<!--                                    <el-button type="primary" plain round @click="dataReloadD" icon="el-icon-refresh" size="mini">自定义样式</el-button>-->
+<!--                                    <el-button type="primary" plain round @click="dataReloadE" icon="el-icon-refresh" size="mini">力导图</el-button>-->
 
           </div>
         </div>
