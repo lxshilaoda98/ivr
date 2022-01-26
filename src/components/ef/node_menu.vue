@@ -81,6 +81,13 @@ export default {
               ico: 'el-icon-user',
               // 自定义覆盖样式
               style: {}
+            }, {
+              id: '16',
+              type: 'transferPhone',
+              name: '转手机',
+              ico: 'el-icon-mobile-phone',
+              // 自定义覆盖样式
+              style: {}
             }
 
           ]

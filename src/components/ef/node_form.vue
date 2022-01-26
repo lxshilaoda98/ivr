@@ -39,7 +39,7 @@
               start-placeholder="开始时间"
               end-placeholder="结束时间"
               placeholder="选择时间范围"
-              >
+            >
             </el-time-picker>
           </el-form-item>
           <el-form-item label="下午">
@@ -54,7 +54,7 @@
           </el-form-item>
           <el-form-item label="日期">
             <el-checkbox-group v-model="offTimeNode.CheckedCities" style="width: 410px;">
-              <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+              <el-checkbox v-for="city in cities" :label="city" :key="city">{{ city }}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="特定工作日">
@@ -172,14 +172,14 @@
           </el-form-item>
 
           <el-form-item label="可选按键">
-          <el-select v-model="musicNode.KxCheck" multiple placeholder="请选择">
-            <el-option
-              v-for="item in Kxoptions"
-              :key="item"
-              :label="item"
-              :value="item">
-            </el-option>
-          </el-select>
+            <el-select v-model="musicNode.KxCheck" multiple placeholder="请选择">
+              <el-option
+                v-for="item in Kxoptions"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item>
@@ -303,12 +303,30 @@
             </el-table>
           </el-form-item>
 
-          <div  @click="addHandleIcrmWorktimeoverrideEntityList()">
+          <div @click="addHandleIcrmWorktimeoverrideEntityList()">
             <el-button type="text" icon="el-icon-plus">新增参数</el-button>
           </div>
 
           <el-form-item>
             <el-button type="primary" icon="el-icon-check" @click="save('httpApi')">保存</el-button>
+          </el-form-item>
+        </el-form>
+
+        <el-form :model="transferPhone" ref="dataForm" label-width="100px" v-show="type === 'transferPhone'">
+          <el-form-item label="名称">
+            <el-input v-model="transferPhone.name"></el-input>
+          </el-form-item>
+          <el-form-item label="手机号码池">
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="请输入内容"
+              v-model="transferPhone.phone_list">
+            </el-input>
+            <h4 style="color: red">注：手机号请用英文“,”号隔开</h4>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-check" @click="save('transferPhone')">保存</el-button>
           </el-form-item>
         </el-form>
 
@@ -320,290 +338,320 @@
 </template>
 
 <script>
-  import moment from 'moment'
-  import {saveViewsType,GetViewsType,SaveFile,RmFile,GetIVRSvc} from './saveApi'
-  import {cloneDeep} from 'lodash'
-  const cityOptions = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-  const isOptions = ['是', '否'];
-  const errOptions = ['转组', '挂断'];
-  const againmenus = ['#', '*'];
-  export default {
-    data() {
-      return {
+import moment from 'moment'
+import {saveViewsType, GetViewsType, SaveFile, RmFile, GetIVRSvc} from './saveApi'
+import {cloneDeep} from 'lodash'
 
-        fileUploadUrl:'http://127.0.0.1:8000/file/upload',
-        GroupList:[],
-        GoHTTPUrl:'http://127.0.0.1:8000/file/playMusic', //播放语音的地址
-        Kxoptions:['1','2','3','4','5','6','7','8','9','0','*','#'],
-        SelectCheck1: isOptions,
-        SelectCheck2: errOptions,
-        againmenus:againmenus,
-        cities: cityOptions,
-        visible: true,
-        // node 或 line
-        type: 'node',
-        node: {},
-        line: {},
-        data: {},
-        offTimeNode: {
-          TimeStart: [
-            new Date(2016, 9, 10, 8, 0),
-            new Date(2016, 9, 10, 12, 0)
-          ],
-          TimeEnd: [
-            new Date(2016, 9, 10, 13, 0),
-            new Date(2016, 9, 10, 17, 30)
-          ],
-          CheckedCities: ['周一', '周二', '周三', '周四', '周五'],
-          Time4: null,
-          Time5: null,
-        },
-        musicNode: {Title:'',Min:'1',Max:'1',Name:'1',Timeout:'5000',Terminators:'#',IsCheck:'是',ErrWav:'',SuccWav:'',Backmenu:'',Againmenu:''},
-        agentNode: {},
-        groupNode: {},
-        httpApiNode:{name:'接口调用',method:'get',url:'http://127.0.0.1',dataForm:{paramList:[],paramkey:'',paramvalue:''}},
-        stateList: [{
-          state: 'success',
-          label: '成功'
-        }, {
-          state: 'warning',
-          label: '警告'
-        }, {
-          state: 'error',
-          label: '错误'
-        }, {
-          state: 'running',
-          label: '运行中'
-        }]
-      }
+const cityOptions = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+const isOptions = ['是', '否'];
+const errOptions = ['转组', '挂断'];
+const againmenus = ['#', '*'];
+export default {
+  data() {
+    return {
+
+      fileUploadUrl: 'http://127.0.0.1:8000/file/upload',
+      GroupList: [],
+      GoHTTPUrl: 'http://127.0.0.1:8000/file/playMusic', //播放语音的地址
+      Kxoptions: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#'],
+      SelectCheck1: isOptions,
+      SelectCheck2: errOptions,
+      againmenus: againmenus,
+      cities: cityOptions,
+      visible: true,
+      // node 或 line
+      type: 'node',
+      node: {},
+      line: {},
+      data: {},
+      offTimeNode: {
+        TimeStart: [
+          new Date(2016, 9, 10, 8, 0),
+          new Date(2016, 9, 10, 12, 0)
+        ],
+        TimeEnd: [
+          new Date(2016, 9, 10, 13, 0),
+          new Date(2016, 9, 10, 17, 30)
+        ],
+        CheckedCities: ['周一', '周二', '周三', '周四', '周五'],
+        Time4: null,
+        Time5: null,
+      },
+      musicNode: {
+        Title: '',
+        Min: '1',
+        Max: '1',
+        Name: '1',
+        Timeout: '5000',
+        Terminators: '#',
+        IsCheck: '是',
+        ErrWav: '',
+        SuccWav: '',
+        Backmenu: '',
+        Againmenu: ''
+      },
+      agentNode: {},
+      groupNode: {},
+      httpApiNode: {
+        name: '接口调用',
+        method: 'get',
+        url: 'http://127.0.0.1',
+        dataForm: {paramList: [], paramkey: '', paramvalue: ''}
+      },
+      transferPhone: {},
+      stateList: [{
+        state: 'success',
+        label: '成功'
+      }, {
+        state: 'warning',
+        label: '警告'
+      }, {
+        state: 'error',
+        label: '错误'
+      }, {
+        state: 'running',
+        label: '运行中'
+      }]
+    }
+  },
+  methods: {
+    playMusic(val) {
+      val = this.GoHTTPUrl + "?musicFile=" + val;
+      // <audio src="../viper.mp3" controls="controls"></audio>
+      this.$alert('<audio src="' + val + '" controls="controls"></audio> ', '试听', {
+        dangerouslyUseHTMLString: true
+      });
     },
-    methods: {
-      playMusic(val){
-        val=this.GoHTTPUrl+"?musicFile="+val;
-        // <audio src="../viper.mp3" controls="controls"></audio>
-        this.$alert('<audio src="'+val+'" controls="controls"></audio> ', '试听', {
-          dangerouslyUseHTMLString: true
-        });
-      },
-      handleDelIcrmWorktimeoverrideEntityList(index) {
-        this.httpApiNode.dataForm.paramList.splice(index, 1)
-      },
-      addHandleIcrmWorktimeoverrideEntityList() {
-        let item = {
-          paramkey: undefined,
-          paramvalue: undefined,
+    handleDelIcrmWorktimeoverrideEntityList(index) {
+      this.httpApiNode.dataForm.paramList.splice(index, 1)
+    },
+    addHandleIcrmWorktimeoverrideEntityList() {
+      let item = {
+        paramkey: undefined,
+        paramvalue: undefined,
+      }
+      this.httpApiNode.dataForm.paramList.push(item);
+    },
+    //上传文件成功后方法
+    dwSuccess(response, file) {
+      //成功后修改数据库存储的数据
+      if (response.code == 0) {
+        let params = {
+          "id": this.node.id,
+          "sJson": response.data,
+          "fid": file.uid,
         }
-        this.httpApiNode.dataForm.paramList.push(item);
-      },
-      //上传文件成功后方法
-      dwSuccess(response,file){
-        //成功后修改数据库存储的数据
-        if(response.code ==0){
-          let params ={
-              "id":this.node.id,
-              "sJson":response.data,
-              "fid":file.uid,
-          }
-          SaveFile(params).then((result) => {
-            if (result.code == "20000") {
-
-            } else {
-              console.log("接口返回异常")
-            }
-          })
-        }
-      },
-      //移除文件方法
-      rmSuccess(file){
-        let params={
-          "fid":file.uid
-        }
-        RmFile(params).then((result) => {
+        SaveFile(params).then((result) => {
           if (result.code == "20000") {
 
           } else {
             console.log("接口返回异常")
           }
         })
-      },
-      handleChange(file, fileList) {
-        this.musicNode.fileList = fileList.slice(-3);
-      },
-      GetFileSize(file){
-        const isLt2M = file.size / 1024 / 1024 < 10;
-        const isJPG = file.type === 'audio/mpeg';
-        if (!isLt2M) {
-          this.$message.error('上传的文件不能超过 10MB!');
-        }
-        if (!isJPG) {
-          this.$message.error('格式错误,只能是mp3文件!');
-        }
-        return isJPG && isLt2M;
-      },
-      /**
-       * 表单修改，这里可以根据传入的ID进行业务信息获取
-       * @param data
-       * @param id
-       */
-      nodeInit(data, id) {
-        this.type = 'node'
-        this.data = data
-        data.nodeList.filter((node) => {
-          if (node.id === id) {
-            if (node.type == "begin") {
-              this.type = 'node';
-            } else {
-              this.type = node.type;
-              //调用接口，查询本次节点的属性.
-              let params ={
-                "id":id,
-                "type":node.type
-              }
-              GetViewsType(params).then((result) => {
-                if (result.code == "20000") {
-                  if(node.type =="offTime"){
-                      if(result.nodeList.Oid!=""){
-                        this.offTimeNode=result.nodeList
-                      }
-                  }else if(node.type =="music"){
-                    if(result.nodeList.Oid!=""){
-                      node.name=result.nodeList.Title;
-                      this.musicNode=result.nodeList
-                      this.musicNode.fileList = result.nodeList.DataList
-                    }else{
-                      this.musicNode.fileList = []
-                    }
-
-                   // this.musicNode.fileList = [{name: 'food.jpg', url: 'https://xxx.cdn.com/xxx.jpg',uid:12312123123}]
-                  }else if(node.type =="agent"){
-                    this.agentNode=result.nodeList;
-                  }else if(node.type =="group"){
-
-                    node.name=result.nodeList.Title;
-                    this.groupNode=result.nodeList;
-                  }
-                  else if(node.type =="httpApi"){
-                    node.name=result.nodeList.name;
-
-                    this.httpApiNode=result.nodeList;
-                  }
-                } else {
-                  console.log("接口返回异常")
-                }
-              })
-              //填充下拉框
-              GetIVRSvc().then((result) => {
-                if (result.code == "20000") {
-                  this.GroupList = result.result
-                }
-                else {
-                  console.log("接口返回异常")
-                }
-
-              })
-            }
-            this.node = cloneDeep(node)
-
-          }
-        })
-      },
-      lineInit(line) {
-        this.type = 'line'
-        this.line = line
-      },
-      // 修改连线
-      saveLine() {
-        this.$emit('setLineLabel', this.line.from, this.line.to, this.line.label)
-      },
-      //保存按钮
-      save(val) {
-        let param={}
-        switch (val) {
-          case "begin" :
-            break;
-          case "offTime":
-            param = {
-              "id": this.node.id,
-              "sJson": this.offTimeNode,
-              "type": val
-            }
-            break;
-          case "music":
-            param = {
-              "id": this.node.id,
-              "sJson": this.musicNode,
-              "type": val
-            }
-            this.node.name=this.musicNode.Title;
-            break;
-          case "agent":
-            param = {
-              "id": this.node.id,
-              "sJson": this.agentNode,
-              "type": val
-            }
-              break;
-          case "group":
-            param = {
-              "id": this.node.id,
-              "sJson": this.groupNode,
-              "type": val
-            }
-            this.node.name=this.groupNode.Title;
-            break;
-          case "httpApi":
-            param = {
-              "name": this.httpApiNode.name,
-              "id": this.node.id,
-              "sJson": this.httpApiNode,
-              "type": val
-            }
-            this.node.name=this.httpApiNode.name;
-            break;
-          default :
-            break;
-        }
-        saveViewsType(param).then((result) => {
-          if (result.code == "20000") {
-            this.$notify({
-              title: '成功',
-              message: '保存成功',
-              type: 'success',
-              duration: 2000
-            })
-          } else {
-            this.$notify({
-              title: '失败',
-              message: '保存失败' + result.msg,
-              type: 'error',
-              duration: result.code
-            })
-          }
-        })
-        this.data.nodeList.filter((node) => {
-          if (node.id === this.node.id) {
-            node.name = this.node.name
-            node.left = this.node.left
-            node.top = this.node.top
-            node.ico = this.node.ico
-            node.state = this.node.state
-          }
-        })
       }
+    },
+    //移除文件方法
+    rmSuccess(file) {
+      let params = {
+        "fid": file.uid
+      }
+      RmFile(params).then((result) => {
+        if (result.code == "20000") {
+
+        } else {
+          console.log("接口返回异常")
+        }
+      })
+    },
+    handleChange(file, fileList) {
+      this.musicNode.fileList = fileList.slice(-3);
+    },
+    GetFileSize(file) {
+      const isLt2M = file.size / 1024 / 1024 < 10;
+      const isJPG = file.type === 'audio/mpeg';
+      if (!isLt2M) {
+        this.$message.error('上传的文件不能超过 10MB!');
+      }
+      if (!isJPG) {
+        this.$message.error('格式错误,只能是mp3文件!');
+      }
+      return isJPG && isLt2M;
+    },
+    /**
+     * 表单修改，这里可以根据传入的ID进行业务信息获取
+     * @param data
+     * @param id
+     */
+    nodeInit(data, id) {
+      this.type = 'node'
+      this.data = data
+      data.nodeList.filter((node) => {
+        if (node.id === id) {
+          if (node.type == "begin") {
+            this.type = 'node';
+          } else {
+            this.type = node.type;
+            //调用接口，查询本次节点的属性.
+            let params = {
+              "id": id,
+              "type": node.type
+            }
+            GetViewsType(params).then((result) => {
+              if (result.code == "20000") {
+                if (node.type == "offTime") {
+                  if (result.nodeList.Oid != "") {
+                    this.offTimeNode = result.nodeList
+                  }
+                } else if (node.type == "music") {
+                  if (result.nodeList.Oid != "") {
+                    node.name = result.nodeList.Title;
+                    this.musicNode = result.nodeList
+                    this.musicNode.fileList = result.nodeList.DataList
+                  } else {
+                    this.musicNode.fileList = []
+                  }
+
+                  // this.musicNode.fileList = [{name: 'food.jpg', url: 'https://xxx.cdn.com/xxx.jpg',uid:12312123123}]
+                } else if (node.type == "agent") {
+                  this.agentNode = result.nodeList;
+                } else if (node.type == "group") {
+
+                  node.name = result.nodeList.Title;
+                  this.groupNode = result.nodeList;
+                } else if (node.type == "httpApi") {
+                  node.name = result.nodeList.name;
+
+                  this.httpApiNode = result.nodeList;
+                }else if (node.type == "transferPhone") {
+                  node.name = result.nodeList.name;
+
+                  this.transferPhone = result.nodeList;
+                }
+              } else {
+                console.log("接口返回异常")
+              }
+            })
+            //填充下拉框
+            GetIVRSvc().then((result) => {
+              if (result.code == "20000") {
+                this.GroupList = result.result
+              } else {
+                console.log("接口返回异常")
+              }
+
+            })
+          }
+          this.node = cloneDeep(node)
+
+        }
+      })
+    },
+    lineInit(line) {
+      this.type = 'line'
+      this.line = line
+    },
+    // 修改连线
+    saveLine() {
+      this.$emit('setLineLabel', this.line.from, this.line.to, this.line.label)
+    },
+    //保存按钮
+    save(val) {
+      let param = {}
+      switch (val) {
+        case "begin" :
+          break;
+        case "offTime":
+          param = {
+            "id": this.node.id,
+            "sJson": this.offTimeNode,
+            "type": val
+          }
+          break;
+        case "music":
+          param = {
+            "id": this.node.id,
+            "sJson": this.musicNode,
+            "type": val
+          }
+          this.node.name = this.musicNode.Title;
+          break;
+        case "agent":
+          param = {
+            "id": this.node.id,
+            "sJson": this.agentNode,
+            "type": val
+          }
+          break;
+        case "group":
+          param = {
+            "id": this.node.id,
+            "sJson": this.groupNode,
+            "type": val
+          }
+          this.node.name = this.groupNode.Title;
+          break;
+        case "httpApi":
+          param = {
+            "name": this.httpApiNode.name,
+            "id": this.node.id,
+            "sJson": this.httpApiNode,
+            "type": val
+          }
+          this.node.name = this.httpApiNode.name;
+          break;
+        case "transferPhone":
+          param = {
+            "name": this.transferPhone.name,
+            "id": this.node.id,
+            "sJson": this.transferPhone,
+            "type": val
+          }
+          this.node.name = this.transferPhone.name;
+          break;
+        default :
+          break;
+      }
+      saveViewsType(param).then((result) => {
+        if (result.code == "20000") {
+          this.$notify({
+            title: '成功',
+            message: '保存成功',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$notify({
+            title: '失败',
+            message: '保存失败' + result.msg,
+            type: 'error',
+            duration: result.code
+          })
+        }
+      })
+      this.data.nodeList.filter((node) => {
+        if (node.id === this.node.id) {
+          node.name = this.node.name
+          node.left = this.node.left
+          node.top = this.node.top
+          node.ico = this.node.ico
+          node.state = this.node.state
+        }
+      })
     }
   }
+}
 </script>
 
 <style>
-  .el-node-form-tag {
-    position: absolute;
-    top: 50%;
-    margin-left: -15px;
-    height: 40px;
-    width: 15px;
-    background-color: #fbfbfb;
-    border: 1px solid rgb(220, 227, 232);
-    border-right: none;
-    z-index: 0;
-  }
+.el-node-form-tag {
+  position: absolute;
+  top: 50%;
+  margin-left: -15px;
+  height: 40px;
+  width: 15px;
+  background-color: #fbfbfb;
+  border: 1px solid rgb(220, 227, 232);
+  border-right: none;
+  z-index: 0;
+}
 </style>
