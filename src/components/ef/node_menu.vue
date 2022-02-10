@@ -88,8 +88,14 @@ export default {
               ico: 'el-icon-mobile-phone',
               // 自定义覆盖样式
               style: {}
+            }, {
+              id: '17',
+              type: 'voiceMail',
+              name: '转留言',
+              ico: 'el-icon-message',
+              // 自定义覆盖样式
+              style: {}
             }
-
           ]
         },
 

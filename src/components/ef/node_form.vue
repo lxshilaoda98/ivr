@@ -330,6 +330,44 @@
           </el-form-item>
         </el-form>
 
+        <el-form :model="voiceMail" ref="dataForm" label-width="100px" v-show="type === 'voiceMail'">
+          <el-form-item label="名称">
+            <el-input v-model="voiceMail.title"></el-input>
+          </el-form-item>
+          <el-form-item label="选择语音文件">
+            <el-upload
+              :on-success="dwSuccess"
+              :on-remove="rmSuccess"
+              class="upload-demo"
+              :action=this.fileUploadUrl
+              :on-change="handleChange"
+              :file-list="voiceMail.DataList"
+              accept=".mp3"
+              :before-upload="GetFileSize"
+              :data={0:this.node.id}
+            >
+
+              <el-button size="small" type="primary">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传wav文件，且不超过10MB</div>
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="转接前">
+            <el-select v-model="voiceMail.bef_music" placeholder="请选择">
+              <el-option
+                v-for="item in voiceMail.DataList"
+                :key="item.url"
+                :label="item.name"
+                :value="item.url">
+              </el-option>
+            </el-select>
+            <el-button type="primary" icon="el-icon-video-play" @click="playMusic(voiceMail.bef_music)"></el-button>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-check" @click="save('voiceMail')">保存</el-button>
+          </el-form-item>
+        </el-form>
+
       </div>
 
     </div>
@@ -399,6 +437,7 @@ export default {
         dataForm: {paramList: [], paramkey: '', paramvalue: ''}
       },
       transferPhone: {},
+      voiceMail:{},
       stateList: [{
         state: 'success',
         label: '成功'
@@ -526,6 +565,10 @@ export default {
                   node.name = result.nodeList.name;
 
                   this.transferPhone = result.nodeList;
+                }else if (node.type == "voiceMail") {
+                  node.name = result.nodeList.title;
+
+                  this.voiceMail = result.nodeList;
                 }
               } else {
                 console.log("接口返回异常")
@@ -607,6 +650,14 @@ export default {
             "type": val
           }
           this.node.name = this.transferPhone.name;
+          break;
+        case "voiceMail":
+          param = {
+            "id": this.node.id,
+            "sJson": this.voiceMail,
+            "type": val
+          }
+          this.node.name = this.voiceMail.title;
           break;
         default :
           break;
