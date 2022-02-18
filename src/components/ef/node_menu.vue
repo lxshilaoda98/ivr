@@ -42,7 +42,7 @@ export default {
         {
           id: '1',
           type: 'group',
-          name: '开始节点',
+          name: '开始',
           ico: 'el-icon-video-play',
           open: true,
           children: [
@@ -60,25 +60,46 @@ export default {
               ico: 'el-icon-time',
               // 自定义覆盖样式
               style: {}
-            }, {
+            }
+          ]
+        },
+        {
+          id: '2',
+          type: 'music',
+          name: '播放节点',
+          ico: 'el-icon-video-pause',
+          open: true,
+          children: [
+             {
               id: '13',
               type: 'music',
-              name: '播放音乐',
+              name: '按键音乐',
               ico: 'el-icon-video-play',
               // 自定义覆盖样式
               style: {}
-            }, {
-              id: '15',
-              type: 'group',
-              name: '转组',
-              ico: 'el-icon-files',
-              // 自定义覆盖样式
-              style: {}
-            }, {
+            }
+          ]
+        },
+        {
+          id: '3',
+          type: 'transfer',
+          name: '转接节点',
+          ico: 'el-icon-video-pause',
+          open: true,
+          children: [
+             {
               id: '14',
               type: 'agent',
               name: '转人工',
               ico: 'el-icon-user',
+              // 自定义覆盖样式
+              style: {}
+            },
+            {
+              id: '15',
+              type: 'group',
+              name: '转组',
+              ico: 'el-icon-files',
               // 自定义覆盖样式
               style: {}
             }, {
@@ -96,11 +117,11 @@ export default {
               // 自定义覆盖样式
               style: {}
             }
+
           ]
         },
-
         {
-          id: '2',
+          id: '4',
           type: 'group',
           name: '自定义节点',
           ico: 'el-icon-video-pause',
