@@ -388,9 +388,9 @@ export default {
   data() {
     return {
 
-      fileUploadUrl: 'http://127.0.0.1:8000/file/upload',
+      fileUploadUrl: 'http://47.93.115.11:8000/file/upload',
       GroupList: [],
-      GoHTTPUrl: 'http://127.0.0.1:8000/file/playMusic', //播放语音的地址
+      GoHTTPUrl: 'http://47.93.115.11:8000/file/playMusic', //播放语音的地址
       Kxoptions: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#'],
       SelectCheck1: isOptions,
       SelectCheck2: errOptions,
