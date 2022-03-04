@@ -94,7 +94,7 @@
               :data={0:this.node.id}
             >
               <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传wav文件，且不超过10MB</div>
+              <div slot="tip" class="el-upload__tip">只能上传MP3文件，且不超过10MB</div>
             </el-upload>
           </el-form-item>
 
@@ -239,7 +239,7 @@
             >
 
               <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传wav文件，且不超过10MB</div>
+              <div slot="tip" class="el-upload__tip">只能上传MP3文件，且不超过10MB</div>
             </el-upload>
           </el-form-item>
           <el-form-item label="转接前">
@@ -348,7 +348,7 @@
             >
 
               <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传wav文件，且不超过10MB</div>
+              <div slot="tip" class="el-upload__tip">只能上传MP3文件，且不超过10MB</div>
             </el-upload>
           </el-form-item>
           <el-form-item label="转接前">
