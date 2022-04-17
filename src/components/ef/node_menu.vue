@@ -74,7 +74,15 @@ export default {
               id: '13',
               type: 'music',
               name: '按键音乐',
-              ico: 'el-icon-video-play',
+              ico: 'el-icon-thumb',
+              // 自定义覆盖样式
+              style: {}
+            },
+            {
+              id: '14',
+              type: 'musicT',
+              name: '播放音乐',
+              ico: 'el-icon-service',
               // 自定义覆盖样式
               style: {}
             }

@@ -23,6 +23,8 @@
             <!--                        <el-button type="primary" plain round @click="dataReloadC" icon="el-icon-refresh" size="mini">切换流程C</el-button>-->
 <!--                                    <el-button type="primary" plain round @click="dataReloadD" icon="el-icon-refresh" size="mini">自定义样式</el-button>-->
 <!--                                    <el-button type="primary" plain round @click="dataReloadE" icon="el-icon-refresh" size="mini">力导图</el-button>-->
+            <el-button type="info" plain round icon="el-icon-document" @click="openHelp" size="mini">帮助</el-button>
+
 
           </div>
         </div>
@@ -56,7 +58,7 @@
     </div>
     <!-- 流程数据详情 -->
     <flow-info v-if="flowInfoVisible" ref="flowInfo" :data="data"></flow-info>
-
+    <flow-help v-if="flowHelpVisible" ref="flowHelp"></flow-help>
   </div>
 
 </template>
@@ -85,6 +87,7 @@
   export default {
     data() {
       return {
+        flowHelpVisible:'',
         dataA:null,
         // jsPlumb 实例
         jsPlumb: null,
@@ -161,6 +164,12 @@
       })
     },
     methods: {
+      openHelp() {
+        this.flowHelpVisible = true
+        this.$nextTick(function () {
+          this.$refs.flowHelp.init()
+        })
+      },
       getJsonData(){
         let id = window.location.pathname.split('/')[1].toString();
         let params = {

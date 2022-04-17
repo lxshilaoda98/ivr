@@ -24,7 +24,6 @@
             <el-input v-model="line.label"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button icon="el-icon-close">重置</el-button>
             <el-button type="primary" icon="el-icon-check" @click="saveLine">保存</el-button>
           </el-form-item>
         </el-form>
@@ -81,45 +80,88 @@
           <el-form-item label="名称">
             <el-input v-model="musicNode.Title"></el-input>
           </el-form-item>
-          <el-form-item label="选择语音文件">
-            <el-upload
-              :on-success="dwSuccess"
-              :on-remove="rmSuccess"
-              class="upload-demo"
-              :action=this.fileUploadUrl
-              :on-change="handleChange"
-              :file-list="musicNode.fileList"
-              accept=".mp3"
-              :before-upload="GetFileSize"
-              :data={0:this.node.id}
-            >
-              <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传MP3文件，且不超过10MB</div>
-            </el-upload>
+
+          <el-form-item label="语音类型">
+            <el-radio-group v-model="musicNode.musicType" @change="valMusicType">
+              <el-radio-button label="文件"></el-radio-button>
+              <el-radio-button label="TTS"></el-radio-button>
+              <el-radio-button label="链接"></el-radio-button>
+            </el-radio-group>
           </el-form-item>
 
-          <el-form-item label="播放的录音">
-            <el-select v-model="musicNode.SuccWav" placeholder="请选择">
-              <el-option
-                v-for="item in musicNode.fileList"
-                :key="item.url"
-                :label="item.name"
-                :value="item.url">
-              </el-option>
-            </el-select>
-            <el-button type="primary" icon="el-icon-video-play" @click="playMusic(musicNode.SuccWav)"></el-button>
-          </el-form-item>
-          <el-form-item label="按键错误录音">
-            <el-select v-model="musicNode.ErrWav" placeholder="请选择">
-              <el-option
-                v-for="item in musicNode.fileList"
-                :key="item.url"
-                :label="item.name"
-                :value="item.url">
-              </el-option>
-            </el-select>
-            <el-button type="primary" icon="el-icon-video-play" @click="playMusic(musicNode.ErrWav)"></el-button>
-          </el-form-item>
+          <el-row v-if="musicHidden=='d'">
+            <el-form-item label="选择语音文件">
+              <el-upload
+                :on-success="dwSuccess"
+                :on-remove="rmSuccess"
+                class="upload-demo"
+                :action=this.fileUploadUrl
+                :on-change="handleChange"
+                :file-list="musicNode.fileList"
+                accept=".mp3"
+                :before-upload="GetFileSize"
+                :data={0:this.node.id}
+              >
+                <el-button size="small" type="primary">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传MP3文件，且不超过10MB</div>
+              </el-upload>
+            </el-form-item>
+            <el-form-item label="播放的录音">
+              <el-select v-model="musicNode.SuccWav" placeholder="请选择">
+                <el-option
+                  v-for="item in musicNode.fileList"
+                  :key="item.url"
+                  :label="item.name"
+                  :value="item.url">
+                </el-option>
+              </el-select>
+              <el-button type="primary" icon="el-icon-video-play" @click="playMusic(musicNode.SuccWav)"></el-button>
+            </el-form-item>
+            <el-form-item label="按键错误录音">
+              <el-select v-model="musicNode.ErrWav" placeholder="请选择">
+                <el-option
+                  v-for="item in musicNode.fileList"
+                  :key="item.url"
+                  :label="item.name"
+                  :value="item.url">
+                </el-option>
+              </el-select>
+              <el-button type="primary" icon="el-icon-video-play" @click="playMusic(musicNode.ErrWav)"></el-button>
+            </el-form-item>
+          </el-row>
+          <el-row v-if="musicHidden=='t'">
+            <el-form-item label="文本">
+              <el-input
+                type="textarea"
+                placeholder="请输入要播报的文本"
+                v-model="musicNode.tts_content">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="按键失败">
+              <el-input
+                type="textarea"
+                placeholder="请输入按键失败要播报的文本"
+                v-model="musicNode.tts_content_err">
+              </el-input>
+            </el-form-item>
+          </el-row>
+          <el-row v-if="musicHidden=='l'">
+            <el-form-item label="链接">
+              <el-input
+                type="textarea"
+                placeholder="请输入语音url链接地址"
+                v-model="musicNode.link_url">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="按键失败">
+              <el-input
+                type="textarea"
+                placeholder="请输入按键失败语音url链接地址"
+                v-model="musicNode.link_url_err">
+              </el-input>
+            </el-form-item>
+            <p style="color: red;text-align: right">http链接并且格式为mp3</p>
+          </el-row>
 
           <el-form-item label="最小位数">
             <el-input v-model="musicNode.Min"></el-input>
@@ -278,7 +320,15 @@
             <el-input v-model="httpApiNode.url"></el-input>
           </el-form-item>
           <el-form-item label="请求方法">
-            <el-input v-model="httpApiNode.method"></el-input>
+
+            <el-select v-model="httpApiNode.method" placeholder="请选择">
+              <el-option
+                v-for="item in methodOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="请求参数">
             <el-table :data="httpApiNode.dataForm.paramList" size="mini">
@@ -368,6 +418,75 @@
           </el-form-item>
         </el-form>
 
+        <el-form :model="musicTNode" ref="dataForm" label-width="100px" v-show="type === 'musicT'">
+          <el-form-item label="名称">
+            <el-input v-model="musicTNode.Title"></el-input>
+          </el-form-item>
+
+          <el-form-item label="语音类型">
+            <el-radio-group v-model="musicTNode.musicType" @change="valMusicTType">
+              <el-radio-button label="文件"></el-radio-button>
+              <el-radio-button label="TTS"></el-radio-button>
+              <el-radio-button label="链接"></el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+
+          <el-row v-if="musicTHidden=='d'">
+            <el-form-item label="选择语音文件">
+              <el-upload
+                :on-success="dwSuccess"
+                :on-remove="rmSuccess"
+                class="upload-demo"
+                :action=this.fileUploadUrl
+                :on-change="handleChange"
+                :file-list="musicTNode.fileList"
+                accept=".mp3"
+                :before-upload="GetFileSize"
+                :data={0:this.node.id}
+              >
+                <el-button size="small" type="primary">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传MP3文件，且不超过10MB</div>
+              </el-upload>
+            </el-form-item>
+            <el-form-item label="播放的录音">
+              <el-select v-model="musicTNode.SuccWav" placeholder="请选择">
+                <el-option
+                  v-for="item in musicTNode.fileList"
+                  :key="item.url"
+                  :label="item.name"
+                  :value="item.url">
+                </el-option>
+              </el-select>
+              <el-button type="primary" icon="el-icon-video-play" @click="playMusic(musicTNode.SuccWav)"></el-button>
+            </el-form-item>
+          </el-row>
+          <el-row v-if="musicTHidden=='t'">
+            <el-form-item label="文本">
+              <el-input
+                type="textarea"
+                placeholder="请输入要播报的文本"
+                v-model="musicTNode.tts_content">
+              </el-input>
+            </el-form-item>
+
+          </el-row>
+          <el-row v-if="musicTHidden=='l'">
+            <el-form-item label="语音链接">
+              <el-input
+                type="textarea"
+                placeholder="请输入语音url链接地址"
+                v-model="musicTNode.link_url">
+              </el-input>
+            </el-form-item>
+
+
+            <p style="color: red;text-align: right">http链接并且格式为mp3</p>
+          </el-row>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-check" @click="save('musicT')">保存</el-button>
+          </el-form-item>
+        </el-form>
+
       </div>
 
     </div>
@@ -384,13 +503,20 @@ const cityOptions = ['周一', '周二', '周三', '周四', '周五', '周六',
 const isOptions = ['是', '否'];
 const errOptions = ['转组', '挂断'];
 const againmenus = ['#', '*'];
+
 export default {
   data() {
     return {
-
-      fileUploadUrl: 'http://47.93.115.11:8000/file/upload',
+      methodOptions:[{
+        value: 'GET',
+        label: 'GET'
+      },{
+        value: 'POST',
+        label: 'POST'
+      }],
+      fileUploadUrl: 'http://127.0.0.1:8000/file/upload',
       GroupList: [],
-      GoHTTPUrl: 'http://47.93.115.11:8000/file/playMusic', //播放语音的地址
+      GoHTTPUrl: 'http://127.0.0.1:8000/file/playMusic', //播放语音的地址
       Kxoptions: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#'],
       SelectCheck1: isOptions,
       SelectCheck2: errOptions,
@@ -402,6 +528,9 @@ export default {
       node: {},
       line: {},
       data: {},
+      musicHidden: '',
+      musicTHidden: '',
+      musicTNode: {},
       offTimeNode: {
         TimeStart: [
           new Date(2016, 9, 10, 8, 0),
@@ -432,12 +561,12 @@ export default {
       groupNode: {},
       httpApiNode: {
         name: '接口调用',
-        method: 'get',
+        method: 'GET',
         url: 'http://127.0.0.1',
         dataForm: {paramList: [], paramkey: '', paramvalue: ''}
       },
       transferPhone: {},
-      voiceMail:{},
+      voiceMail: {},
       stateList: [{
         state: 'success',
         label: '成功'
@@ -454,6 +583,24 @@ export default {
     }
   },
   methods: {
+    valMusicTType(val) {
+      if (val == "文件") {
+        this.musicTHidden = 'd';
+      } else if (val == "TTS") {
+        this.musicTHidden = 't';
+      } else if (val == "链接") {
+        this.musicTHidden = 'l';
+      }
+    },
+    valMusicType(val) {
+      if (val == "文件") {
+        this.musicHidden = 'd';
+      } else if (val == "TTS") {
+        this.musicHidden = 't';
+      } else if (val == "链接") {
+        this.musicHidden = 'l';
+      }
+    },
     playMusic(val) {
       val = this.GoHTTPUrl + "?musicFile=" + val;
       // <audio src="../viper.mp3" controls="controls"></audio>
@@ -543,15 +690,37 @@ export default {
                   }
                 } else if (node.type == "music") {
                   if (result.nodeList.Oid != "") {
+                    if (result.nodeList.musicType == "文件") {
+                      this.musicHidden = 'd';
+                    } else if (result.nodeList.musicType == "TTS") {
+                      this.musicHidden = 't';
+                    } else if (result.nodeList.musicType == "链接") {
+                      this.musicHidden = 'l';
+                    }
                     node.name = result.nodeList.Title;
                     this.musicNode = result.nodeList
                     this.musicNode.fileList = result.nodeList.DataList
                   } else {
                     this.musicNode.fileList = []
                   }
-
                   // this.musicNode.fileList = [{name: 'food.jpg', url: 'https://xxx.cdn.com/xxx.jpg',uid:12312123123}]
-                } else if (node.type == "agent") {
+                }else if (node.type == "musicT") {
+
+                  if (result.nodeList.Oid != "") {
+                    if (result.nodeList.musicType == "文件") {
+                      this.musicTHidden = 'd';
+                    } else if (result.nodeList.musicType == "TTS") {
+                      this.musicTHidden = 't';
+                    } else if (result.nodeList.musicType == "链接") {
+                      this.musicTHidden = 'l';
+                    }
+                    node.name = result.nodeList.Title;
+                    this.musicTNode = result.nodeList
+                    this.musicTNode.fileList = result.nodeList.DataList
+                  } else {
+                    this.musicTNode.fileList = []
+                  }
+                }else if (node.type == "agent") {
                   this.agentNode = result.nodeList;
                 } else if (node.type == "group") {
 
@@ -561,11 +730,11 @@ export default {
                   node.name = result.nodeList.name;
 
                   this.httpApiNode = result.nodeList;
-                }else if (node.type == "transferPhone") {
+                } else if (node.type == "transferPhone") {
                   node.name = result.nodeList.name;
 
                   this.transferPhone = result.nodeList;
-                }else if (node.type == "voiceMail") {
+                } else if (node.type == "voiceMail") {
                   node.name = result.nodeList.title;
 
                   this.voiceMail = result.nodeList;
@@ -658,6 +827,14 @@ export default {
             "type": val
           }
           this.node.name = this.voiceMail.title;
+          break;
+        case "musicT":
+          param = {
+            "id": this.node.id,
+            "sJson": this.musicTNode,
+            "type": val
+          }
+          this.node.name = this.musicTNode.Title;
           break;
         default :
           break;
