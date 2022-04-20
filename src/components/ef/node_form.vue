@@ -224,6 +224,17 @@
             </el-select>
           </el-form-item>
 
+          <el-form-item label="全局">
+            <el-switch
+              v-model="musicNode.globaldisplay"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+            </el-switch>
+          </el-form-item>
+          <el-form-item label="变量名">
+            <el-input v-model="musicNode.globalVal" placeholder="请输入内容"></el-input>
+          </el-form-item>
+
           <el-form-item>
             <el-button type="primary" icon="el-icon-check" @click="save('music')">保存</el-button>
           </el-form-item>
@@ -352,10 +363,19 @@
               </el-table-column>
             </el-table>
           </el-form-item>
-
           <div @click="addHandleIcrmWorktimeoverrideEntityList()">
             <el-button type="text" icon="el-icon-plus">新增参数</el-button>
           </div>
+          <el-form-item label="全局">
+            <el-switch
+              v-model="httpApiNode.globaldisplay"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+            </el-switch>
+          </el-form-item>
+          <el-form-item label="变量名">
+            <el-input v-model="httpApiNode.globalVal" placeholder="请输入内容"></el-input>
+          </el-form-item>
 
           <el-form-item>
             <el-button type="primary" icon="el-icon-check" @click="save('httpApi')">保存</el-button>
@@ -514,9 +534,9 @@ export default {
         value: 'POST',
         label: 'POST'
       }],
-      fileUploadUrl: 'http://127.0.0.1:8000/file/upload',
+      fileUploadUrl: 'http://127.0.0.1:5000/file/upload',
       GroupList: [],
-      GoHTTPUrl: 'http://127.0.0.1:8000/file/playMusic', //播放语音的地址
+      GoHTTPUrl: 'http://127.0.0.1:5000/file/playMusic', //播放语音的地址
       Kxoptions: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#'],
       SelectCheck1: isOptions,
       SelectCheck2: errOptions,

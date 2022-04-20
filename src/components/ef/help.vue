@@ -58,6 +58,13 @@
 
       </el-tab-pane>
 
+      <el-tab-pane label="全局变量">
+        <el-divider content-position="left">如果设置全局变量</el-divider>
+        <div>在[httpApi]节点上，勾选"全局"然后起个名字</div>
+        <el-divider content-position="left">如果使用全局变量</el-divider>
+        <div>使用@符号+变量的名字即可。例如：@user </div>
+      </el-tab-pane>
+
     </el-tabs>
   </el-dialog>
 </template>

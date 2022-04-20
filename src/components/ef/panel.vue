@@ -48,7 +48,7 @@
           </flow-node>
         </template>
         <!-- 给画布一个默认的宽度和高度 -->
-        <div style="position:absolute;top: 2000px;left: 2000px;">&nbsp;</div>
+        <div style="position:absolute;top: 5000px;left: 4000px;">&nbsp;</div>
       </div>
       <!-- 右侧表单 -->
       <div style="border-left: 1px solid #dce3e8;background-color: #FBFBFB">
