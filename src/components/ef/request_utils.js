@@ -10,9 +10,6 @@ const service = axios.create({
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
-
-
-
 // response interceptor
 service.interceptors.response.use(
   /**

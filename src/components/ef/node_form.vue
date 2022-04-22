@@ -5,12 +5,12 @@
         编辑
       </div>
       <div class="ef-node-form-body">
-        <el-form :model="node" ref="dataForm" label-width="100px" v-show="type === 'node'">
+        <el-form :model="begin" ref="dataForm" label-width="100px" v-show="type === 'begin'">
           <el-form-item label="类型">
-            <el-input v-model="node.type" :disabled="true"></el-input>
+            <el-input v-model="begin.btype" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="名称">
-            <el-input v-model="node.name" :disabled="true"></el-input>
+            <el-input v-model="begin.bname" :disabled="true"></el-input>
           </el-form-item>
 
           <el-form-item>
@@ -545,6 +545,7 @@ export default {
       visible: true,
       // node 或 line
       type: 'node',
+      begin:{btype:"begin",bname:"开始"},
       node: {},
       line: {},
       data: {},
@@ -693,7 +694,7 @@ export default {
       this.data = data
       data.nodeList.filter((node) => {
         if (node.id === id) {
-          if (node.type == "begin") {
+          if (node.type == "begindasd") {
             this.type = 'node';
           } else {
             this.type = node.type;
@@ -748,7 +749,6 @@ export default {
                   this.groupNode = result.nodeList;
                 } else if (node.type == "httpApi") {
                   node.name = result.nodeList.name;
-
                   this.httpApiNode = result.nodeList;
                 } else if (node.type == "transferPhone") {
                   node.name = result.nodeList.name;
@@ -758,6 +758,8 @@ export default {
                   node.name = result.nodeList.title;
 
                   this.voiceMail = result.nodeList;
+                }else if (node.type == "begin"){
+
                 }
               } else {
                 console.log("接口返回异常")
@@ -791,6 +793,11 @@ export default {
       let param = {}
       switch (val) {
         case "begin" :
+          param = {
+            "id": this.node.id,
+            "sJson": this.begin,
+            "type": val
+          }
           break;
         case "offTime":
           param = {
