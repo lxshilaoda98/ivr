@@ -30,6 +30,9 @@
 
         <!--时间控件-->
         <el-form :model="offTimeNode" ref="dataForm" label-width="100px" v-show="type === 'offTime'">
+          <el-form-item label="名称">
+            <el-input v-model="offTimeNode.Title"></el-input>
+          </el-form-item>
           <el-form-item label="上午">
             <el-time-picker
               is-range
@@ -707,6 +710,7 @@ export default {
               if (result.code == "20000") {
                 if (node.type == "offTime") {
                   if (result.nodeList.Oid != "") {
+                    node.name = result.nodeList.Title;
                     this.offTimeNode = result.nodeList
                   }
                 } else if (node.type == "music") {
@@ -805,6 +809,7 @@ export default {
             "sJson": this.offTimeNode,
             "type": val
           }
+          this.node.name = this.offTimeNode.Title;
           break;
         case "music":
           param = {
