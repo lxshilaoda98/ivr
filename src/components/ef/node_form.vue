@@ -346,7 +346,7 @@
           </el-form-item>
           <el-form-item label="请求参数">
             <el-table :data="httpApiNode.dataForm.paramList" size="mini">
-              <el-table-column prop="paramkey" label="key" width="100">
+              <el-table-column prop="paramkey" label="key" width="150">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.paramkey"></el-input>
                 </template>
