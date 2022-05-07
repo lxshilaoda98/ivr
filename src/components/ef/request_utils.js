@@ -6,9 +6,9 @@ import { MessageBox, Message } from 'element-ui'
 
 
 const service = axios.create({
-  baseURL:"http://127.0.0.1:5000", // url = base url + request url
+  baseURL:"http://127.0.0.1:8000", // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  timeout: 10000 // request timeout
 })
 // response interceptor
 service.interceptors.response.use(

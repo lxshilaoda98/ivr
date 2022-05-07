@@ -44,6 +44,30 @@ export function saveViewsType(query) {
   })
 }
 
+export function saveViewsCode(query) {
+  return request({
+    url: '/IvrSaveForCode',
+    method: 'post',
+    params: query
+  })
+}
+
+export function getViewsCode(query) {
+  return request({
+    url: '/GetViewsCode',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getViewsList(query) {
+  return request({
+    url: '/GetViewsList',
+    method: 'get',
+    params: query
+  })
+}
+
 export function GetViewsType(query) {
   return request({
     url: '/GetViewsType',

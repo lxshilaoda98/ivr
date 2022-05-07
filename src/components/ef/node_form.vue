@@ -1,3 +1,4 @@
+<script src="../../ace/ace.js"></script>
 <template>
   <div>
     <div class="ef-node-form">
@@ -15,6 +16,7 @@
 
           <el-form-item>
             <el-button type="primary" icon="el-icon-check" @click="save('begin')">保存</el-button>
+
           </el-form-item>
         </el-form>
 
@@ -23,9 +25,12 @@
           <el-form-item label="条件">
             <el-input v-model="line.label"></el-input>
           </el-form-item>
+
+
           <el-form-item>
             <el-button type="primary" icon="el-icon-check" @click="saveLine">保存</el-button>
           </el-form-item>
+
         </el-form>
 
         <!--时间控件-->
@@ -510,16 +515,64 @@
           </el-form-item>
         </el-form>
 
+
+        <el-form :model="aceCodeNode" ref="dataForm" label-width="100px" v-show="type === 'aceCode'">
+          <el-form-item label="名称">
+            <el-input v-model="aceCodeNode.title"></el-input>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-check" @click="save('aceCode')">保存</el-button>
+            <el-button type="primary" icon="el-icon-check" @click="writerCode">编码</el-button>
+          </el-form-item>
+        </el-form>
+
+
+        <el-form :model="transferNode" ref="dataForm" label-width="100px" v-show="type === 'transferNode'">
+          <el-form-item label="名称">
+            <el-input v-model="transferNode.title"></el-input>
+          </el-form-item>
+          <el-form-item label="选择节点">
+            <el-select filterable  v-model="transferNode.xnTransferNode" placeholder="请选择">
+              <el-option
+                v-for="item in codeList"
+                :key="item.viewsOid"
+                :label="item.title"
+                :value="item.viewsOid">
+              </el-option>
+            </el-select>
+
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-check" @click="save('transferNode')">保存</el-button>
+          </el-form-item>
+        </el-form>
+
       </div>
 
     </div>
+    <el-dialog
+      title="自定义"
+      :visible.sync="dialogVisible"
+      width="60%"
+      :before-close="handleClose">
+
+      <editor v-model="aceCodeNode.code" @init="editorInit" lang="javascript" theme="chrome"
+              width="100%" height="500" :options="options"></editor>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveCode()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 
 </template>
 
 <script>
 import moment from 'moment'
-import {saveViewsType, GetViewsType, SaveFile, RmFile, GetIVRSvc} from './saveApi'
+import {saveViewsType, GetViewsType, SaveFile, RmFile, GetIVRSvc,saveViewsCode,getViewsCode,getViewsList} from './saveApi'
 import {cloneDeep} from 'lodash'
 
 const cityOptions = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
@@ -528,8 +581,31 @@ const errOptions = ['转组', '挂断'];
 const againmenus = ['#', '*'];
 
 export default {
+  components: {
+    editor: require('vue2-ace-editor'),
+  },
   data() {
     return {
+      codeList:[],
+      options:{
+        enableBasicAutocompletion: true, // 启用基本自动完成
+        enableSnippets: true, // 启用代码段
+        enableLiveAutocompletion: true, // 启用实时自动完成
+        printMarginColumn: 30,
+        displayIndentGuides: false, // 显示参考线
+        enableEmmet: true, // 启用Emmet
+        tabSize: 6, // 标签大小
+        fontSize: 14, // 设置字号
+        useWorker: true, // 使用辅助对象
+        showPrintMargin: false, //去除编辑器里的竖线
+        enableMultiselect: true, //     选中多处
+        readOnly: false, // 是否只读
+        showFoldWidgets: true, // 显示折叠部件
+        fadeFoldWidgets: true, // 淡入折叠部件
+        wrap: true //换行
+      },
+      transferNode:{},
+      dialogVisible: false,
       methodOptions:[{
         value: 'GET',
         label: 'GET'
@@ -537,9 +613,9 @@ export default {
         value: 'POST',
         label: 'POST'
       }],
-      fileUploadUrl: 'http://127.0.0.1:5000/file/upload',
+      fileUploadUrl: 'http://127.0.0.1:8000/file/upload',
       GroupList: [],
-      GoHTTPUrl: 'http://127.0.0.1:5000/file/playMusic', //播放语音的地址
+      GoHTTPUrl: 'http://127.0.0.1:8000/file/playMusic', //播放语音的地址
       Kxoptions: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#'],
       SelectCheck1: isOptions,
       SelectCheck2: errOptions,
@@ -548,6 +624,7 @@ export default {
       visible: true,
       // node 或 line
       type: 'node',
+      aceCodeNode:{},
       begin:{btype:"begin",bname:"开始"},
       node: {},
       line: {},
@@ -603,10 +680,93 @@ export default {
       }, {
         state: 'running',
         label: '运行中'
-      }]
+      }],
+
     }
   },
   methods: {
+    writerCode(){
+      this.dialogVisible=true;
+      console.log("node"+this.node.id)
+      let params ={
+        id:this.node.id
+      }
+      getViewsCode(params).then((result) => {
+        if (result.code == "20000") {
+          this.aceCodeNode.code= result.nodeList.code;
+        } else {
+          this.$notify({
+            title: '失败',
+            message: '接口返回异常' ,
+            type: 'error',
+            duration: result.code
+          })
+        }
+      })
+    },
+    saveCode(){
+      console.log("node>>"+this.node.id);
+      console.log("代码片段>>"+this.aceCodeNode.code);
+      let param ={
+        id:this.node.id,
+        code:this.aceCodeNode.code
+      }
+
+      saveViewsCode(param).then((result) => {
+        if (result.code == "20000") {
+          this.$notify({
+            title: '成功',
+            message: '保存成功',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$notify({
+            title: '失败',
+            message: '保存失败' + result.msg,
+            type: 'error',
+            duration: result.code
+          })
+        }
+      })
+
+      this.dialogVisible = false
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
+    },
+    editorInit: function (editor) {
+      editor.resize();
+      // 监听编辑器变化
+
+      editor.getSession().on("change", val => {
+        console.log("debug log --> ", editor.getValue());
+        this.$emit("change", editor.getValue());
+      });
+      editor.commands.addCommand({
+        name: 'save',
+        bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
+        exec: editor => this.$emit('save-change', this.value, editor)
+      })
+      editor.commands.addCommand({
+        name: 'formatter',
+        bindKey: { win: 'Ctrl-Shift-F', mac: 'Command-Shift-F' },
+        exec: () => this.$emit('formatter', this.editor)
+      })
+
+
+
+      const aceTools = require('brace/ext/language_tools'); //language extension prerequsite...
+      // require('brace/mode/html')
+      require('brace/mode/javascript');    //language
+      // require('brace/mode/less')
+      require('brace/theme/chrome'); //主题
+      require('brace/snippets/javascript'); //snippet
+    },
     valMusicTType(val) {
       if (val == "文件") {
         this.musicTHidden = 'd';
@@ -687,6 +847,12 @@ export default {
       }
       return isJPG && isLt2M;
     },
+    getUrlParam(name)
+    {
+      let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象\
+      let r = window.location.search.substr(1).match(reg); //匹配目标参数
+      if (r!=null) return unescape(r[2]); return null; //返回参数值
+    },
     /**
      * 表单修改，这里可以根据传入的ID进行业务信息获取
      * @param data
@@ -696,10 +862,13 @@ export default {
       this.type = 'node'
       this.data = data
       data.nodeList.filter((node) => {
+
         if (node.id === id) {
+
           if (node.type == "begindasd") {
             this.type = 'node';
           } else {
+
             this.type = node.type;
             //调用接口，查询本次节点的属性.
             let params = {
@@ -707,6 +876,7 @@ export default {
               "type": node.type
             }
             GetViewsType(params).then((result) => {
+
               if (result.code == "20000") {
                 if (node.type == "offTime") {
                   if (result.nodeList.Oid != "") {
@@ -764,20 +934,47 @@ export default {
                   this.voiceMail = result.nodeList;
                 }else if (node.type == "begin"){
 
+                }else if (node.type == "aceCode"){
+                  this.aceCodeNode = result.nodeList
+                }else if(node.type == "transferNode"){
+
+                   //请求url返回结果getViewsList
+                   this.transferNode= result.nodeList
                 }
               } else {
                 console.log("接口返回异常")
               }
-            })
-            //填充下拉框
-            GetIVRSvc().then((result) => {
-              if (result.code == "20000") {
-                this.GroupList = result.result
-              } else {
-                console.log("接口返回异常")
-              }
+            });
 
-            })
+            let fid = this.getUrlParam('fid');
+            let ListP={
+              foid:fid
+            }
+
+            if (node.type == "transferNode"){
+              getViewsList(ListP).then((result) => {
+                if (result.code == "20000") {
+                  this.codeList= result.nodeList;
+                } else {
+                  this.$notify({
+                    title: '失败',
+                    message: '接口返回异常' ,
+                    type: 'error',
+                    duration: result.code
+                  })
+                }
+              })
+            }else if (node.type == "group"){
+              //填充下拉框
+              GetIVRSvc().then((result) => {
+                if (result.code == "20000") {
+                  this.GroupList = result.result
+                } else {
+                  console.log("接口返回异常")
+                }
+
+              })
+            }
           }
           this.node = cloneDeep(node)
 
@@ -796,6 +993,14 @@ export default {
     save(val) {
       let param = {}
       switch (val) {
+        case "aceCode":
+          param = {
+            "id": this.node.id,
+            "sJson": this.aceCodeNode,
+            "type": val
+          }
+          this.node.name = this.aceCodeNode.title;
+          break;
         case "begin" :
           param = {
             "id": this.node.id,
@@ -868,6 +1073,15 @@ export default {
           }
           this.node.name = this.musicTNode.Title;
           break;
+        case "transferNode":
+          param = {
+            "id": this.node.id,
+            "sJson": this.transferNode,
+            "type": val
+          }
+          this.node.name = this.transferNode.title;
+          break;
+
         default :
           break;
       }

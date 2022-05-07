@@ -142,7 +142,29 @@ export default {
               ico: 'el-icon-sort',
               // 自定义覆盖样式
               style: {}
+            },{
+              id: '32',
+              type: 'flowEnd',
+              name: '流程结束',
+              ico: 'el-icon-circle-close',
+              // 自定义覆盖样式
+              style: {}
+            },{
+              id: '33',
+              type: 'transferNode',
+              name: '虚拟跳转',
+              ico: 'el-icon-refresh-right',
+              // 自定义覆盖样式
+              style: {}
+            },{
+              id: '34',
+              type: 'aceCode',
+              name: '自定义代码',
+              ico: 'el-icon-document',
+              // 自定义覆盖样式
+              style: {}
             }
+
           ]
         }
       ],
