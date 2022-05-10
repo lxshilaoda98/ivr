@@ -14,9 +14,29 @@
             <el-input v-model="begin.bname" :disabled="true"></el-input>
           </el-form-item>
 
+          <el-form-item label="设置变量">
+            <el-table :data="begin.dataForm.paramList" size="mini">
+              <el-table-column prop="paramkey" label="变量名" width="150">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.paramkey"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="50">
+                <template slot-scope="scope">
+                  <el-button size="mini" type="text"
+                             @click="handleDelIcrmBegin(scope.$index)"
+                  >删除
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-form-item>
+          <div @click="addHandleIcrmBegin()">
+            <el-button type="text" icon="el-icon-plus">新增参数</el-button>
+          </div>
+
           <el-form-item>
             <el-button type="primary" icon="el-icon-check" @click="save('begin')">保存</el-button>
-
           </el-form-item>
         </el-form>
 
@@ -586,6 +606,7 @@ export default {
   },
   data() {
     return {
+      foid:'',
       codeList:[],
       options:{
         enableBasicAutocompletion: true, // 启用基本自动完成
@@ -625,7 +646,7 @@ export default {
       // node 或 line
       type: 'node',
       aceCodeNode:{},
-      begin:{btype:"begin",bname:"开始"},
+      begin:{btype:"begin",bname:"开始",dataForm: {paramList: [], paramkey: ''}},
       node: {},
       line: {},
       data: {},
@@ -795,6 +816,9 @@ export default {
     handleDelIcrmWorktimeoverrideEntityList(index) {
       this.httpApiNode.dataForm.paramList.splice(index, 1)
     },
+    handleDelIcrmBegin(index) {
+      this.begin.dataForm.paramList.splice(index, 1)
+    },
     addHandleIcrmWorktimeoverrideEntityList() {
       let item = {
         paramkey: undefined,
@@ -802,6 +826,13 @@ export default {
       }
       this.httpApiNode.dataForm.paramList.push(item);
     },
+    addHandleIcrmBegin() {
+      let item = {
+        paramkey: undefined
+      }
+      this.begin.dataForm.paramList.push(item);
+    },
+
     //上传文件成功后方法
     dwSuccess(response, file) {
       //成功后修改数据库存储的数据
@@ -859,6 +890,7 @@ export default {
      * @param id
      */
     nodeInit(data, id) {
+      let fid = this.getUrlParam('fid');
       this.type = 'node'
       this.data = data
       data.nodeList.filter((node) => {
@@ -872,6 +904,7 @@ export default {
             this.type = node.type;
             //调用接口，查询本次节点的属性.
             let params = {
+              "foid":fid,
               "id": id,
               "type": node.type
             }
@@ -933,7 +966,7 @@ export default {
 
                   this.voiceMail = result.nodeList;
                 }else if (node.type == "begin"){
-
+                  this.begin = result.nodeList;
                 }else if (node.type == "aceCode"){
                   this.aceCodeNode = result.nodeList
                 }else if(node.type == "transferNode"){
@@ -946,7 +979,8 @@ export default {
               }
             });
 
-            let fid = this.getUrlParam('fid');
+
+            this.foid=fid;
             let ListP={
               foid:fid
             }
@@ -987,6 +1021,7 @@ export default {
     },
     // 修改连线
     saveLine() {
+      console.log("保存线")
       this.$emit('setLineLabel', this.line.from, this.line.to, this.line.label)
     },
     //保存按钮
@@ -1003,6 +1038,7 @@ export default {
           break;
         case "begin" :
           param = {
+            "foid":this.foid,
             "id": this.node.id,
             "sJson": this.begin,
             "type": val

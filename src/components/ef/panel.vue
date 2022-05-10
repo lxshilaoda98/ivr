@@ -498,7 +498,7 @@
           "sJson": this.data
         }
         saveModel(params).then((result) => {
-          if (result.code == "20000") {
+          if (result.code == 20000) {
             this.$notify({
               title: '成功',
               message: '创建成功',
