@@ -63,6 +63,49 @@
         <div>在[httpApi]/[music]节点上，勾选"全局"然后起个名字</div>
         <el-divider content-position="left">如果使用全局变量</el-divider>
         <div>使用@符号+变量的名字即可。例如：@user </div>
+
+        <el-divider content-position="left">设置变量</el-divider>
+        <div>
+          1、在开始的模块中，新增变量名。 <br>
+          2、可以在自定义代码中通过 ： 变量名 = xxxx 赋值。<br>
+        </div>
+        <el-divider content-position="left">条件中使用变量做判断</el-divider>
+        <div>列如：(worktime == "true"  && offtime=="false") (worktime == "true"  || offtime=="false")<br>
+          ==：等于  <br>
+          &&：并且  <br>
+          ||：或者  <br>
+          需要注意的是：值是字符串类型，需要加""。 </div>
+
+      </el-tab-pane>
+
+      <el-tab-pane label="内置方法">
+        <el-table
+          :data="interfaceData"
+          style="width: 100%">
+          <el-table-column
+            prop="comment"
+            label="方法名"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="title"
+            label="描述">
+          </el-table-column>
+          <el-table-column
+            prop="cont"
+            label="参数"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="com"
+            label="例子">
+          </el-table-column>
+          <el-table-column
+            prop="use"
+            label="返回结果">
+          </el-table-column>
+
+        </el-table>
       </el-tab-pane>
 
     </el-tabs>
@@ -74,7 +117,8 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      tableData: [{
+      tableData: [
+        {
         comment: '{val}',
         cont: '获取上个接口返回的数据',
         use: '播放音乐，语音类型为[TTS] / 接口调用'
@@ -94,7 +138,27 @@ export default {
         comment: '{UUid}',
         cont: '呼叫id',
         use: '接口调用'
-      }]
+      }],
+      interfaceData: [
+        {
+          comment: 'exSQL(驱动,sql语句)',
+          title: '执行语句',
+          cont: '驱动，sql语句',
+          com: 'exSQL("mysql","insert into 表名 (字段名) values(值)")',
+          use: '返回结果[成功/失败] 。支持语句：insert ，update，delete'
+        },{
+          comment: 'exQuerySQL(驱动,sql语句)',
+          title: '查询语句',
+          cont: '驱动，sql语句',
+          com: 'exQuerySQL("mysql","select * from 表名 where 1=1")',
+          use: '返回[] json 。支持语句：select'
+        },{
+          comment: 'exJson(json串,"字段名",索引)',
+          title: '解析json获取对应字段的值。可以配合exQuerySQL方法使用',
+          cont: '驱动，sql语句',
+          com: 'exJson("[{"a":"123","b":"xxxxx"}]","a",0)  返回结果：123',
+          use: '返回[] json 。支持语句：select。索引0开始'
+        }]
     }
   },
   components: {},
