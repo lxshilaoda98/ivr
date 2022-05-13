@@ -47,10 +47,11 @@
           </el-form-item>
 
 
+
           <el-form-item>
             <el-button type="primary" icon="el-icon-check" @click="saveLine">保存</el-button>
           </el-form-item>
-
+          <h4 style="color: red">注：需要保存一下流程</h4>
         </el-form>
 
         <!--时间控件-->
@@ -230,7 +231,7 @@
           </el-form-item>
 
 
-          <el-form-item label="可否打断">
+          <el-form-item label="可否打断" v-if="false">
             <el-select v-model="musicNode.IsCheck" placeholder="请选择">
               <el-option
                 v-for="item in SelectCheck1"

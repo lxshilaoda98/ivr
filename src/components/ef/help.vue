@@ -79,6 +79,7 @@
       </el-tab-pane>
 
       <el-tab-pane label="内置方法">
+
         <el-table
           :data="interfaceData"
           style="width: 100%">
@@ -106,6 +107,7 @@
           </el-table-column>
 
         </el-table>
+        <b>可选驱动： mysql、mssql</b>
       </el-tab-pane>
 
     </el-tabs>
@@ -154,7 +156,7 @@ export default {
           use: '返回[] json 。支持语句：select'
         },{
           comment: 'exJson(json串,"字段名",索引)',
-          title: '解析json获取对应字段的值。可以配合exQuerySQL方法使用',
+          title: '解析json获取对应字段的值。可以配合exQuerySQL方法使用。获取子级写法：data.data 。获取子级只支持object,不支持[]object .[]object的时候searchIndex才生效',
           cont: '驱动，sql语句',
           com: 'exJson("[{"a":"123","b":"xxxxx"}]","a",0)  返回结果：123',
           use: '返回[] json 。支持语句：select。索引0开始'
