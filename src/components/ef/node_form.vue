@@ -595,11 +595,11 @@
 import moment from 'moment'
 import {saveViewsType, GetViewsType, SaveFile, RmFile, GetIVRSvc,saveViewsCode,getViewsCode,getViewsList} from './saveApi'
 import {cloneDeep} from 'lodash'
-
 const cityOptions = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 const isOptions = ['是', '否'];
 const errOptions = ['转组', '挂断'];
 const againmenus = ['#', '*'];
+const myAppUrl = window.appConig;
 
 export default {
   components: {
@@ -635,9 +635,9 @@ export default {
         value: 'POST',
         label: 'POST'
       }],
-      fileUploadUrl: 'http://127.0.0.1:8000/file/upload',
+      fileUploadUrl: myAppUrl.baseURL+'/file/upload',
       GroupList: [],
-      GoHTTPUrl: 'http://127.0.0.1:8000/file/playMusic', //播放语音的地址
+      GoHTTPUrl:  myAppUrl.baseURL+'/file/playMusic', //播放语音的地址
       Kxoptions: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#'],
       SelectCheck1: isOptions,
       SelectCheck2: errOptions,

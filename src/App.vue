@@ -6,7 +6,6 @@
 
 <script>
     import FlowPanel from '@/components/ef/panel'
-
     export default {
         name: 'App',
         components: {

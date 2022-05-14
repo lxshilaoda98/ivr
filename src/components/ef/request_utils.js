@@ -4,12 +4,15 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 
+const myAppUrl = window.appConig;
 
-const service = axios.create({
-  baseURL:"http://127.0.0.1:8000", // url = base url + request url
+const service = axios.create(
+  {
+  baseURL:myAppUrl.baseURL, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 10000 // request timeout
-})
+}
+)
 // response interceptor
 service.interceptors.response.use(
   /**
