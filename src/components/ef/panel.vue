@@ -19,7 +19,7 @@
             <el-button type="primary" @click="sendInfo" size="mini" v-show="false">写入流程</el-button>
 <!--            <el-button type="info" plain round icon="el-icon-document" @click="dataInfo" size="mini">流程信息</el-button>-->
 <!--            <el-button type="primary" plain round @click="dataReloadA" icon="el-icon-refresh" size="mini">电话流程</el-button>-->
-            <!--                        <el-button type="primary" plain round @click="dataReloadB" icon="el-icon-refresh" size="mini">切换流程B</el-button>-->
+<!--                                    <el-button type="primary" plain round @click="dataReloadB" icon="el-icon-refresh" size="mini">切换流程B</el-button>-->
             <!--                        <el-button type="primary" plain round @click="dataReloadC" icon="el-icon-refresh" size="mini">切换流程C</el-button>-->
 <!--                                    <el-button type="primary" plain round @click="dataReloadD" icon="el-icon-refresh" size="mini">自定义样式</el-button>-->
 <!--                                    <el-button type="primary" plain round @click="dataReloadE" icon="el-icon-refresh" size="mini">力导图</el-button>-->
@@ -50,8 +50,9 @@
         <!-- 给画布一个默认的宽度和高度 -->
         <div style="position:absolute;top: 5000px;left: 4000px;">&nbsp;</div>
       </div>
+      <el-button @click="ycClieck"></el-button>
       <!-- 右侧表单 -->
-      <div style="border-left: 1px solid #dce3e8;background-color: #FBFBFB">
+      <div v-show="yc" style="border-left: 0px solid #dce3e8;background-color: #FBFBFB"  >
         <flow-node-form ref="nodeForm" @setLineLabel="setLineLabel"
                         @repaintEverything="repaintEverything"></flow-node-form>
       </div>
@@ -87,6 +88,7 @@
   export default {
     data() {
       return {
+        yc:false,
         flowHelpVisible:'',
         dataA:null,
         // jsPlumb 实例
@@ -164,6 +166,13 @@
       })
     },
     methods: {
+      ycClieck(){
+        if (this.yc){
+          this.yc=false;
+        }else{
+          this.yc = true;
+        }
+      },
       openHelp() {
         this.flowHelpVisible = true
         this.$nextTick(function () {
@@ -630,3 +639,9 @@
     }
   }
 </script>
+
+<style>
+.flowHelp {
+  height: 80%;
+}
+</style>

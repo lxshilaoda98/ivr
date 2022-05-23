@@ -782,7 +782,7 @@ export default {
 
 
 
-      const aceTools = require('brace/ext/language_tools'); //language extension prerequsite...
+      require('brace/ext/language_tools'); //language extension prerequsite...
       // require('brace/mode/html')
       require('brace/mode/javascript');    //language
       // require('brace/mode/less')
@@ -1001,7 +1001,7 @@ export default {
               })
             }else if (node.type == "group"){
               //填充下拉框
-              GetIVRSvc().then((result) => {
+              GetIVRSvc(ListP).then((result) => {
                 if (result.code == "20000") {
                   this.GroupList = result.result
                 } else {

@@ -3,10 +3,11 @@
  */
 import request from './request_utils'
 
-export function GetIVRSvc() {
+export function GetIVRSvc(query) {
   return request({
     url: '/call/getIVRSvc',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 
