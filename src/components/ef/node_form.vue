@@ -39,7 +39,6 @@
             <el-button type="primary" icon="el-icon-check" @click="save('begin')">保存</el-button>
           </el-form-item>
         </el-form>
-
         <!--线控件-->
         <el-form :model="line" ref="dataForm" label-width="100px" v-show="type === 'line'">
           <el-form-item label="条件">
@@ -47,13 +46,11 @@
           </el-form-item>
 
 
-
           <el-form-item>
             <el-button type="primary" icon="el-icon-check" @click="saveLine">保存</el-button>
           </el-form-item>
           <h4 style="color: red">注：需要保存一下流程</h4>
         </el-form>
-
         <!--时间控件-->
         <el-form :model="offTimeNode" ref="dataForm" label-width="100px" v-show="type === 'offTime'">
           <el-form-item label="名称">
@@ -104,7 +101,6 @@
             <el-button type="primary" icon="el-icon-check" @click="save('offTime')">保存</el-button>
           </el-form-item>
         </el-form>
-
         <el-form :model="musicNode" ref="dataForm" label-width="100px" v-show="type === 'music'">
           <el-form-item label="名称">
             <el-input v-model="musicNode.Title"></el-input>
@@ -268,41 +264,16 @@
             <el-button type="primary" icon="el-icon-check" @click="save('music')">保存</el-button>
           </el-form-item>
         </el-form>
-
         <el-form :model="agentNode" ref="dataForm" label-width="100px" v-show="type === 'agent'">
-
-          <el-form-item label="可否打断">
-            <el-select v-model="agentNode.isCheck" placeholder="请选择">
-              <el-option
-                v-for="item in SelectCheck1"
-                :key="item"
-                :label="item"
-                :value="item">
-              </el-option>
-            </el-select>
-          </el-form-item>
 
           <el-form-item label="人员信息">
             <el-input v-model="agentNode.name"></el-input>
           </el-form-item>
 
-          <el-form-item label="失败操作">
-            <el-select v-model="agentNode.err" placeholder="请选择">
-              <el-option
-                v-for="item in SelectCheck2"
-                :key="item"
-                :label="item"
-                :value="item">
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-
           <el-form-item>
             <el-button type="primary" icon="el-icon-check" @click="save('agent')">保存</el-button>
           </el-form-item>
         </el-form>
-
         <el-form :model="groupNode" ref="dataForm" label-width="100px" v-show="type === 'group'">
           <el-form-item label="名称">
             <el-input v-model="groupNode.Title"></el-input>
@@ -350,7 +321,6 @@
             <el-button type="primary" icon="el-icon-check" @click="save('group')">保存</el-button>
           </el-form-item>
         </el-form>
-
         <el-form :model="httpApiNode" ref="dataForm" label-width="100px" v-show="type === 'httpApi'">
 
           <el-form-item label="名称">
@@ -410,7 +380,6 @@
             <el-button type="primary" icon="el-icon-check" @click="save('httpApi')">保存</el-button>
           </el-form-item>
         </el-form>
-
         <el-form :model="transferPhone" ref="dataForm" label-width="100px" v-show="type === 'transferPhone'">
           <el-form-item label="名称">
             <el-input v-model="transferPhone.name"></el-input>
@@ -428,7 +397,6 @@
             <el-button type="primary" icon="el-icon-check" @click="save('transferPhone')">保存</el-button>
           </el-form-item>
         </el-form>
-
         <el-form :model="voiceMail" ref="dataForm" label-width="100px" v-show="type === 'voiceMail'">
           <el-form-item label="名称">
             <el-input v-model="voiceMail.title"></el-input>
@@ -466,7 +434,6 @@
             <el-button type="primary" icon="el-icon-check" @click="save('voiceMail')">保存</el-button>
           </el-form-item>
         </el-form>
-
         <el-form :model="musicTNode" ref="dataForm" label-width="100px" v-show="type === 'musicT'">
           <el-form-item label="名称">
             <el-input v-model="musicTNode.Title"></el-input>
@@ -535,8 +502,6 @@
             <el-button type="primary" icon="el-icon-check" @click="save('musicT')">保存</el-button>
           </el-form-item>
         </el-form>
-
-
         <el-form :model="aceCodeNode" ref="dataForm" label-width="100px" v-show="type === 'aceCode'">
           <el-form-item label="名称">
             <el-input v-model="aceCodeNode.title"></el-input>
@@ -547,14 +512,12 @@
             <el-button type="primary" icon="el-icon-check" @click="writerCode">编码</el-button>
           </el-form-item>
         </el-form>
-
-
         <el-form :model="transferNode" ref="dataForm" label-width="100px" v-show="type === 'transferNode'">
           <el-form-item label="名称">
             <el-input v-model="transferNode.title"></el-input>
           </el-form-item>
           <el-form-item label="选择节点">
-            <el-select filterable  v-model="transferNode.xnTransferNode" placeholder="请选择">
+            <el-select filterable v-model="transferNode.xnTransferNode" placeholder="请选择">
               <el-option
                 v-for="item in codeList"
                 :key="item.viewsOid"
@@ -567,6 +530,33 @@
 
           <el-form-item>
             <el-button type="primary" icon="el-icon-check" @click="save('transferNode')">保存</el-button>
+          </el-form-item>
+        </el-form>
+
+        <el-form :model="robotNameNode" ref="dataForm" label-width="100px" v-show="type === 'robotName'">
+
+          <el-form-item label="名称">
+            <el-input v-model="robotNameNode.title"></el-input>
+          </el-form-item>
+          <el-form-item label="机器人接口">
+            <el-input v-model="robotNameNode.url"></el-input>
+          </el-form-item>
+          <el-form-item label="人工关键字">
+            <el-input v-model="robotNameNode.transferAgent"></el-input>
+          </el-form-item>
+          <el-form-item label="组信息">
+            <el-select v-model="robotNameNode.groupName" placeholder="请选择">
+              <el-option
+                v-for="item in GroupList"
+                :key="item.svc_code"
+                :label="item.svc_name"
+                :value="item.svc_code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-check" @click="save('robotName')">保存</el-button>
           </el-form-item>
         </el-form>
 
@@ -593,8 +583,18 @@
 
 <script>
 import moment from 'moment'
-import {saveViewsType, GetViewsType, SaveFile, RmFile, GetIVRSvc,saveViewsCode,getViewsCode,getViewsList} from './saveApi'
+import {
+  saveViewsType,
+  GetViewsType,
+  SaveFile,
+  RmFile,
+  GetIVRSvc,
+  saveViewsCode,
+  getViewsCode,
+  getViewsList
+} from './saveApi'
 import {cloneDeep} from 'lodash'
+
 const cityOptions = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 const isOptions = ['是', '否'];
 const errOptions = ['转组', '挂断'];
@@ -607,9 +607,12 @@ export default {
   },
   data() {
     return {
-      foid:'',
-      codeList:[],
-      options:{
+      foid: '',
+      robotNameNode: {
+        url: 'http://127.0.0.1'
+      },
+      codeList: [],
+      options: {
         enableBasicAutocompletion: true, // 启用基本自动完成
         enableSnippets: true, // 启用代码段
         enableLiveAutocompletion: true, // 启用实时自动完成
@@ -626,18 +629,18 @@ export default {
         fadeFoldWidgets: true, // 淡入折叠部件
         wrap: true //换行
       },
-      transferNode:{},
+      transferNode: {},
       dialogVisible: false,
-      methodOptions:[{
+      methodOptions: [{
         value: 'GET',
         label: 'GET'
-      },{
+      }, {
         value: 'POST',
         label: 'POST'
       }],
-      fileUploadUrl: myAppUrl.baseURL+'/file/upload',
+      fileUploadUrl: myAppUrl.baseURL + '/file/upload',
       GroupList: [],
-      GoHTTPUrl:  myAppUrl.baseURL+'/file/playMusic', //播放语音的地址
+      GoHTTPUrl: myAppUrl.baseURL + '/file/playMusic', //播放语音的地址
       Kxoptions: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#'],
       SelectCheck1: isOptions,
       SelectCheck2: errOptions,
@@ -646,8 +649,8 @@ export default {
       visible: true,
       // node 或 line
       type: 'node',
-      aceCodeNode:{},
-      begin:{btype:"begin",bname:"开始",dataForm: {paramList: [], paramkey: ''}},
+      aceCodeNode: {},
+      begin: {btype: "begin", bname: "开始", dataForm: {paramList: [], paramkey: ''}},
       node: {},
       line: {},
       data: {},
@@ -673,7 +676,7 @@ export default {
         Max: '1',
         Name: '1',
         Timeout: '5000',
-        Terminators: '#',
+        Terminators: '',
         IsCheck: '是',
         ErrWav: '',
         SuccWav: '',
@@ -707,33 +710,30 @@ export default {
     }
   },
   methods: {
-    writerCode(){
-      this.dialogVisible=true;
-      console.log("node"+this.node.id)
-      let params ={
-        id:this.node.id
+    writerCode() {
+      this.dialogVisible = true;
+      console.log("node" + this.node.id)
+      let params = {
+        id: this.node.id
       }
       getViewsCode(params).then((result) => {
         if (result.code == "20000") {
-          this.aceCodeNode.code= result.nodeList.code;
+          this.aceCodeNode.code = result.nodeList.code;
         } else {
           this.$notify({
             title: '失败',
-            message: '接口返回异常' ,
+            message: '接口返回异常',
             type: 'error',
             duration: result.code
           })
         }
       })
     },
-    saveCode(){
-      console.log("node>>"+this.node.id);
-      console.log("代码片段>>"+this.aceCodeNode.code);
-      let param ={
-        id:this.node.id,
-        code:this.aceCodeNode.code
+    saveCode() {
+      let param = {
+        id: this.node.id,
+        code: this.aceCodeNode.code
       }
-
       saveViewsCode(param).then((result) => {
         if (result.code == "20000") {
           this.$notify({
@@ -751,7 +751,6 @@ export default {
           })
         }
       })
-
       this.dialogVisible = false
     },
     handleClose(done) {
@@ -759,7 +758,8 @@ export default {
         .then(_ => {
           done();
         })
-        .catch(_ => {});
+        .catch(_ => {
+        });
     },
     editorInit: function (editor) {
       editor.resize();
@@ -771,15 +771,14 @@ export default {
       });
       editor.commands.addCommand({
         name: 'save',
-        bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
+        bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
         exec: editor => this.$emit('save-change', this.value, editor)
       })
       editor.commands.addCommand({
         name: 'formatter',
-        bindKey: { win: 'Ctrl-Shift-F', mac: 'Command-Shift-F' },
+        bindKey: {win: 'Ctrl-Shift-F', mac: 'Command-Shift-F'},
         exec: () => this.$emit('formatter', this.editor)
       })
-
 
 
       require('brace/ext/language_tools'); //language extension prerequsite...
@@ -879,11 +878,11 @@ export default {
       }
       return isJPG && isLt2M;
     },
-    getUrlParam(name)
-    {
-      let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象\
+    getUrlParam(name) {
+      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象\
       let r = window.location.search.substr(1).match(reg); //匹配目标参数
-      if (r!=null) return unescape(r[2]); return null; //返回参数值
+      if (r != null) return unescape(r[2]);
+      return null; //返回参数值
     },
     /**
      * 表单修改，这里可以根据传入的ID进行业务信息获取
@@ -905,7 +904,7 @@ export default {
             this.type = node.type;
             //调用接口，查询本次节点的属性.
             let params = {
-              "foid":fid,
+              "foid": fid,
               "id": id,
               "type": node.type
             }
@@ -933,7 +932,7 @@ export default {
                     this.musicNode.fileList = []
                   }
                   // this.musicNode.fileList = [{name: 'food.jpg', url: 'https://xxx.cdn.com/xxx.jpg',uid:12312123123}]
-                }else if (node.type == "musicT") {
+                } else if (node.type == "musicT") {
 
                   if (result.nodeList.Oid != "") {
                     if (result.nodeList.musicType == "文件") {
@@ -949,7 +948,7 @@ export default {
                   } else {
                     this.musicTNode.fileList = []
                   }
-                }else if (node.type == "agent") {
+                } else if (node.type == "agent") {
                   this.agentNode = result.nodeList;
                 } else if (node.type == "group") {
 
@@ -966,14 +965,16 @@ export default {
                   node.name = result.nodeList.title;
 
                   this.voiceMail = result.nodeList;
-                }else if (node.type == "begin"){
+                } else if (node.type == "begin") {
                   this.begin = result.nodeList;
-                }else if (node.type == "aceCode"){
+                } else if (node.type == "aceCode") {
                   this.aceCodeNode = result.nodeList
-                }else if(node.type == "transferNode"){
-
-                   //请求url返回结果getViewsList
-                   this.transferNode= result.nodeList
+                } else if (node.type == "transferNode") {
+                  //请求url返回结果getViewsList
+                  this.transferNode = result.nodeList
+                }else if (node.type == "robotName") {
+                  //请求url返回结果getViewsList
+                  this.robotNameNode = result.nodeList
                 }
               } else {
                 console.log("接口返回异常")
@@ -981,25 +982,25 @@ export default {
             });
 
 
-            this.foid=fid;
-            let ListP={
-              foid:fid
+            this.foid = fid;
+            let ListP = {
+              foid: fid
             }
 
-            if (node.type == "transferNode"){
+            if (node.type == "transferNode") {
               getViewsList(ListP).then((result) => {
                 if (result.code == "20000") {
-                  this.codeList= result.nodeList;
+                  this.codeList = result.nodeList;
                 } else {
                   this.$notify({
                     title: '失败',
-                    message: '接口返回异常' ,
+                    message: '接口返回异常',
                     type: 'error',
                     duration: result.code
                   })
                 }
               })
-            }else if (node.type == "group"){
+            } else if (node.type == "group" || node.type=="robotName") {
               //填充下拉框
               GetIVRSvc(ListP).then((result) => {
                 if (result.code == "20000") {
@@ -1039,7 +1040,7 @@ export default {
           break;
         case "begin" :
           param = {
-            "foid":this.foid,
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.begin,
             "type": val
@@ -1118,6 +1119,13 @@ export default {
           }
           this.node.name = this.transferNode.title;
           break;
+        case "robotName":
+          param = {
+            "id": this.node.id,
+            "sJson": this.robotNameNode,
+            "type": val
+          }
+          this.node.name = this.robotNameNode.title;
 
         default :
           break;

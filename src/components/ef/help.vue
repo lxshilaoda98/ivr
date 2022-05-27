@@ -110,6 +110,24 @@
         <b>可选驱动： mysql、mssql</b>
       </el-tab-pane>
 
+      <el-tab-pane label="内置变量">
+
+        <el-table
+          :data="varName"
+          style="width: 100%">
+          <el-table-column
+            prop="comment"
+            label="变量名称"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="title"
+            label="描述">
+          </el-table-column>
+        </el-table>
+        <b>code模块可以通过变量名来获取</b>
+      </el-tab-pane>
+
     </el-tabs>
   </el-dialog>
 </template>
@@ -157,10 +175,30 @@ export default {
         },{
           comment: 'exJson(json串,"字段名",索引)',
           title: '解析json获取对应字段的值。可以配合exQuerySQL方法使用。获取子级写法：data.data 。获取子级只支持object,不支持[]object .[]object的时候searchIndex才生效',
-          cont: '驱动，sql语句',
+          cont: 'json串，字段名,索引',
           com: 'exJson("[{"a":"123","b":"xxxxx"}]","a",0)  返回结果：123',
           use: '返回[] json 。支持语句：select。索引0开始'
-        }]
+        },{
+          comment: 'evaluate(主叫,按键信息,呼叫id)',
+          title: '满意度入库使用的方法',
+          cont: '主叫，按键信息,呼叫id',
+          com: 'evaluate(callerNumber,endkey,callUuid)',
+          use: 'void方法，无返回'
+        }],
+      varName:[
+        {
+          "comment":"callUuid",
+          "title":"呼叫id"
+        },
+        {
+          "comment":"callerNumber",
+          "title":"主叫"
+        },
+        {
+          "comment":"calleeNumber",
+          "title":"被叫"
+        }
+      ]
     }
   },
   components: {},

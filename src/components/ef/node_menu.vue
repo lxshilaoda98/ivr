@@ -166,6 +166,21 @@ export default {
             }
 
           ]
+        },
+        {
+          id: '5',
+          type: 'intelligent',
+          name: '智能节点',
+          ico: 'el-icon-magic-stick',
+          open: true,
+          children: [{
+            id: '35',
+            type: 'robotName',
+            name: '智能机器人',
+            ico: 'el-icon-user',
+            // 自定义覆盖样式
+            style: {}
+          }]
         }
       ],
       nodeMenu: {}
