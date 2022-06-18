@@ -538,8 +538,15 @@
           <el-form-item label="名称">
             <el-input v-model="robotNameNode.title"></el-input>
           </el-form-item>
-          <el-form-item label="机器人接口">
-            <el-input v-model="robotNameNode.url"></el-input>
+          <el-form-item label="机器人">
+            <el-select v-model="robotNameNode.templateId" placeholder="请选择">
+              <el-option
+                v-for="item in tenantIdList"
+                :key="item.templateId"
+                :label="item.templateName"
+                :value="item.templateId">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="人工关键字">
             <el-input v-model="robotNameNode.transferAgent"></el-input>
@@ -591,7 +598,7 @@ import {
   GetIVRSvc,
   saveViewsCode,
   getViewsCode,
-  getViewsList
+  getViewsList, GetRobotList
 } from './saveApi'
 import {cloneDeep} from 'lodash'
 
@@ -639,6 +646,7 @@ export default {
         label: 'POST'
       }],
       fileUploadUrl: myAppUrl.baseURL + '/file/upload',
+      tenantIdList:[],
       GroupList: [],
       GoHTTPUrl: myAppUrl.baseURL + '/file/playMusic', //播放语音的地址
       Kxoptions: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#'],
@@ -894,7 +902,6 @@ export default {
       this.type = 'node'
       this.data = data
       data.nodeList.filter((node) => {
-
         if (node.id === id) {
 
           if (node.type == "begindasd") {
@@ -980,13 +987,11 @@ export default {
                 console.log("接口返回异常")
               }
             });
-
-
             this.foid = fid;
             let ListP = {
               foid: fid
             }
-
+            console.log("node.type>>"+node.type)
             if (node.type == "transferNode") {
               getViewsList(ListP).then((result) => {
                 if (result.code == "20000") {
@@ -1006,9 +1011,18 @@ export default {
                 if (result.code == "20000") {
                   this.GroupList = result.result
                 } else {
+                  console.log("接口返回异常");
+                }
+              })
+              let robotBody = {
+                "company": fid
+              }
+              GetRobotList(robotBody).then((result) => {
+                if (result.code == "20000") {
+                  this.tenantIdList = result.msg.data
+                } else {
                   console.log("接口返回异常")
                 }
-
               })
             }
           }

@@ -3,6 +3,15 @@
  */
 import request from './request_utils'
 
+export function GetRobotList(query) {
+  return request({
+    url: '/robot/getList',
+    method: 'get',
+    params : query
+  })
+}
+
+
 export function GetIVRSvc(query) {
   return request({
     url: '/call/getIVRSvc',
