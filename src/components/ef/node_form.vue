@@ -548,10 +548,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="人工关键字">
+          <el-form-item label="人工关键字" v-if="false">
             <el-input v-model="robotNameNode.transferAgent"></el-input>
           </el-form-item>
-          <el-form-item label="组信息">
+          <el-form-item label="组信息" v-if="false">
             <el-select v-model="robotNameNode.groupName" placeholder="请选择">
               <el-option
                 v-for="item in GroupList"
