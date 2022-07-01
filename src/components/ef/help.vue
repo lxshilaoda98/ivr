@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <el-dialog
     title="帮助"
     :visible.sync="dialogVisible"
@@ -55,7 +55,6 @@
         <el-divider content-position="left">内置TTS接口信息</el-divider>
         <h3>需要网络</h3>
         <div>链接信息： http://127.0.0.1:6767/tts/baiduTTS?tts=要转换的文字</div>
-
       </el-tab-pane>
 
       <el-tab-pane label="全局变量">
@@ -128,6 +127,21 @@
         <b>code模块可以通过变量名来获取</b>
       </el-tab-pane>
 
+      <el-tab-pane label="表达式使用">
+        <b>可以通过 变量名 =="" 来做一些条件判断</b>
+      </el-tab-pane>
+
+      <el-tab-pane label="转人工模块介绍">
+        <b>可以通过接口返回的数据来转人工</b><br>
+        人员信息写 {val} ,代表要接收上个接口返回的数据<br>
+        也可以直接填写接口返回的格式<br>
+        接口返回格式为：<br>
+        SERVICECARD=组信息<br>
+        STATION=话机信息<br>
+        PHONE=手机号<br>
+
+      </el-tab-pane>
+
     </el-tabs>
   </el-dialog>
 </template>
@@ -184,6 +198,18 @@ export default {
           cont: '主叫，按键信息,呼叫id',
           com: 'evaluate(callerNumber,endkey,callUuid)',
           use: 'void方法，无返回'
+        },{
+          comment: 'numberCity(号码)',
+          title: '查询号码所属城市',
+          cont: '号码',
+          com: 'numberCity(callerNumber) / numberCity("13211223321")',
+          use: '返回：城市'
+        },{
+          comment: 'numberProvince(号码)',
+          title: '查询号码所属省份',
+          cont: '号码',
+          com: 'numberProvince(callerNumber) / numberProvince("13211223321")',
+          use: '返回：省份'
         }],
       varName:[
         {
