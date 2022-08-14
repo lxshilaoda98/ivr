@@ -140,6 +140,8 @@
         STATION=话机信息<br>
         PHONE=手机号<br>
 
+        GW=robot=6002 (GW=网关的名称=被叫号码传6002)<br>
+
       </el-tab-pane>
 
     </el-tabs>
