@@ -95,6 +95,14 @@ export default {
           ico: 'el-icon-video-pause',
           open: true,
           children: [
+            {
+              id: '13',
+              type: 'transferSipUrl',
+              name: '转外部',
+              ico: 'el-icon-share',
+              // 自定义覆盖样式
+              style: {}
+            },
              {
               id: '14',
               type: 'agent',

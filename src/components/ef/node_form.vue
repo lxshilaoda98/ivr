@@ -205,7 +205,7 @@
           </el-form-item>
 
           <el-form-item label="返回上级菜单">
-            <el-select v-model="musicNode.Backmenu" placeholder="请选择">
+            <el-select v-model="musicNode.Backmenu" clearable placeholder="请选择">
               <el-option
                 v-for="item in againmenus"
                 :key="item"
@@ -216,7 +216,7 @@
           </el-form-item>
 
           <el-form-item label="重听">
-            <el-select v-model="musicNode.Againmenu" placeholder="请选择">
+            <el-select v-model="musicNode.Againmenu" clearable placeholder="请选择">
               <el-option
                 v-for="item in againmenus"
                 :key="item"
@@ -239,7 +239,7 @@
           </el-form-item>
 
           <el-form-item label="可选按键">
-            <el-select v-model="musicNode.KxCheck" multiple placeholder="请选择">
+            <el-select v-model="musicNode.KxCheck" clearable multiple placeholder="请选择">
               <el-option
                 v-for="item in Kxoptions"
                 :key="item"
@@ -567,6 +567,47 @@
           </el-form-item>
         </el-form>
 
+        <el-form :model="transferSipUrl" ref="dataForm" label-width="100px" v-show="type === 'transferSipUrl'">
+
+          <el-form-item label="名称">
+            <el-input v-model="transferSipUrl.title"></el-input>
+          </el-form-item>
+          <el-form-item label="模式">
+            <el-radio-group v-model="transferSipUrl.callType" @change="transferSipUrlChange">
+              <el-radio-button label="呼叫串"></el-radio-button>
+              <el-radio-button label="网关"></el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+
+          <!--originate {effective_caller_id_number=86668220}user/1002 &bridge(sofia/internal/017600082595@10.117.2.96)-->
+
+          <el-form-item label="sip串" v-show="transferSipUrlvis.sipurl">
+            <el-input v-model="transferSipUrl.sipurl" placeholder="sip:被叫号码@对端ip"></el-input>
+          </el-form-item>
+
+          <el-form-item label="选择网关" v-show="transferSipUrlvis.gateway">
+            <template>
+              <el-select v-model="transferSipUrl.gateway" placeholder="请选择">
+                <el-option
+                  v-for="item in transferSipUrl.gatewayList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.label">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+                </el-option>
+              </el-select>
+            </template>
+          </el-form-item>
+          <el-form-item label="被叫号码" v-show="transferSipUrlvis.gateway">
+            <el-input v-model="transferSipUrl.calleeNumber" ></el-input>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-check" @click="save('transferSipUrl')">保存</el-button>
+          </el-form-item>
+        </el-form>
+
       </div>
 
     </div>
@@ -612,12 +653,16 @@ export default {
   components: {
     editor: require('vue2-ace-editor'),
   },
+  created() {
+    this.initSipUser()
+  },
   data() {
     return {
       foid: '',
       robotNameNode: {
         url: 'http://127.0.0.1'
       },
+      transferSipUrlvis:{sipurl:false,gateway:false},
       codeList: [],
       options: {
         enableBasicAutocompletion: true, // 启用基本自动完成
@@ -636,6 +681,7 @@ export default {
         fadeFoldWidgets: true, // 淡入折叠部件
         wrap: true //换行
       },
+      transferSipUrl:{callType:'呼叫串',gatewayList:[]},
       transferNode: {},
       dialogVisible: false,
       methodOptions: [{
@@ -718,6 +764,25 @@ export default {
     }
   },
   methods: {
+    initSipUser(){
+        if (this.transferSipUrl.callType=="呼叫串"){
+          this.transferSipUrlvis.sipurl = true;
+          this.transferSipUrlvis.gateway = false;
+        }else if (this.transferSipUrl.callType =="网关"){
+          this.transferSipUrlvis.sipurl = false;
+          this.transferSipUrlvis.gateway = true;
+        }
+    },
+    transferSipUrlChange(val){
+      console.log("val",val);
+      if (val =="呼叫串"){
+        this.transferSipUrlvis.sipurl = true;
+        this.transferSipUrlvis.gateway = false;
+      }else if (val =="网关"){
+        this.transferSipUrlvis.sipurl = false;
+        this.transferSipUrlvis.gateway = true;
+      }
+    },
     writerCode() {
       this.dialogVisible = true;
       console.log("node" + this.node.id)
@@ -982,6 +1047,9 @@ export default {
                 }else if (node.type == "robotName") {
                   //请求url返回结果getViewsList
                   this.robotNameNode = result.nodeList
+                }else if (node.type == "transferSipUrl") {
+
+                  this.transferSipUrl = result.nodeList
                 }
               } else {
                 console.log("接口返回异常")
@@ -1140,7 +1208,13 @@ export default {
             "type": val
           }
           this.node.name = this.robotNameNode.title;
-
+        case "transferSipUrl":
+          param = {
+            "id": this.node.id,
+            "sJson": this.transferSipUrl,
+            "type": val
+          }
+          this.node.name = this.transferSipUrl.title;
         default :
           break;
       }
