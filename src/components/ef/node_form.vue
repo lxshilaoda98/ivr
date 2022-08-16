@@ -774,7 +774,6 @@ export default {
         }
     },
     transferSipUrlChange(val){
-      console.log("val",val);
       if (val =="呼叫串"){
         this.transferSipUrlvis.sipurl = true;
         this.transferSipUrlvis.gateway = false;
@@ -1050,6 +1049,7 @@ export default {
                 }else if (node.type == "transferSipUrl") {
 
                   this.transferSipUrl = result.nodeList
+                  this.initSipUser();
                 }
               } else {
                 console.log("接口返回异常")
