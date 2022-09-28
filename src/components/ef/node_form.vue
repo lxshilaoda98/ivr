@@ -265,7 +265,9 @@
           </el-form-item>
         </el-form>
         <el-form :model="agentNode" ref="dataForm" label-width="100px" v-show="type === 'agent'">
-
+          <el-form-item label="名称">
+            <el-input v-model="agentNode.title"></el-input>
+          </el-form-item>
           <el-form-item label="人员信息">
             <el-input v-model="agentNode.name"></el-input>
           </el-form-item>
@@ -1021,6 +1023,7 @@ export default {
                   }
                 } else if (node.type == "agent") {
                   this.agentNode = result.nodeList;
+                  node.name = result.nodeList.title;
                 } else if (node.type == "group") {
 
                   node.name = result.nodeList.Title;
@@ -1150,6 +1153,7 @@ export default {
             "sJson": this.agentNode,
             "type": val
           }
+          this.node.name = this.agentNode.title;
           break;
         case "group":
           param = {
@@ -1208,6 +1212,7 @@ export default {
             "type": val
           }
           this.node.name = this.robotNameNode.title;
+          break;
         case "transferSipUrl":
           param = {
             "id": this.node.id,
