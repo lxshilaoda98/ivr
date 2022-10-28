@@ -28,6 +28,15 @@ export function GetIvrModel(query) {
     params: query
   })
 }
+
+//初始化流程
+export function initSaveIvr(query) {
+  return request({
+    url: '/ivr/create',
+    method: 'post',
+    data: query
+  })
+}
 //写入流程
 export function SenIvrModel(query) {
   return request({

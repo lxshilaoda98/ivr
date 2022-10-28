@@ -15,6 +15,7 @@
           <el-divider direction="vertical"></el-divider>
           <el-button type="text" icon="el-icon-minus" size="large" @click="zoomSub"></el-button>
           <div style="float: right;margin-right: 5px">
+            <el-button type="primary" @click="dialogFormVisible = true" size="mini">初始化流程</el-button>
             <el-button type="primary" @click="saveInfo" size="mini">保存流程</el-button>
             <el-button type="primary" @click="sendInfo" size="mini" v-show="false">写入流程</el-button>
 <!--            <el-button type="info" plain round icon="el-icon-document" @click="dataInfo" size="mini">流程信息</el-button>-->
@@ -60,8 +61,29 @@
     <!-- 流程数据详情 -->
     <flow-info v-if="flowInfoVisible" ref="flowInfo" :data="data"></flow-info>
     <flow-help v-if="flowHelpVisible" ref="flowHelp"></flow-help>
-  </div>
 
+
+    <el-dialog title="初始化IVR" :visible.sync="dialogFormVisible">
+      <el-form :model="ivrFrom">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="id"  >
+              <el-input v-model="ivrFrom.foid" autocomplete="off"  style="width: 260px"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="名称"  >
+              <el-input v-model="ivrFrom.name" autocomplete="off" style="width: 260px"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveIvr()">确 定</el-button>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -83,11 +105,13 @@
   import {getDataE} from './data_E'
   import {ForceDirected} from './force-directed'
 
-  import {saveModel, GetIvrModel,SenIvrModel} from './saveApi'
+  import {saveModel, GetIvrModel,SenIvrModel,initSaveIvr} from './saveApi'
 
   export default {
     data() {
       return {
+        ivrFrom:{},
+        dialogFormVisible:false,
         yc:false,
         flowHelpVisible:'',
         dataA:null,
@@ -166,6 +190,34 @@
       })
     },
     methods: {
+      //初始化流程
+      saveIvr(){
+        this.dialogFormVisible = false;
+        initSaveIvr(this.ivrFrom).then((result) => {
+          if (result.code == "200") {
+            this.$notify({
+              title: '成功',
+              message: '初始化成功',
+              type: 'success'
+            });
+            let url = window.location.href;
+            let urls = url.split("=");
+            if (urls.length==1){
+              window.location.href= url+"?fid="+this.ivrFrom.foid;
+            }else{
+              window.location.href= urls[0]+"="+this.ivrFrom.foid;
+            }
+
+
+          } else {
+            this.$notify({
+              title: '失败',
+              message: '初始化失败',
+              type: 'error'
+            });
+          }
+        })
+      },
       ycClieck(){
         if (this.yc){
           this.yc=false;
