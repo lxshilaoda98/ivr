@@ -60,6 +60,13 @@ export default {
               ico: 'el-icon-time',
               // 自定义覆盖样式
               style: {}
+            },{
+              id: '36',
+              type: 'evaluateNode',
+              name: '满意度开始',
+              ico: 'el-icon-coordinate',
+              // 自定义覆盖样式
+              style: {}
             }
           ]
         },

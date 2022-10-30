@@ -39,6 +39,18 @@
             <el-button type="primary" icon="el-icon-check" @click="save('begin')">保存</el-button>
           </el-form-item>
         </el-form>
+
+        <el-form :model="evaluateNode" ref="dataForm" label-width="100px" v-show="type === 'evaluateNode'">
+          <el-form-item label="类型">
+            <el-input v-model="evaluateNode.btype" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="名称">
+            <el-input v-model="evaluateNode.bname" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-check" @click="save('evaluateNode')">保存</el-button>
+          </el-form-item>
+        </el-form>
         <!--线控件-->
         <el-form :model="line" ref="dataForm" label-width="100px" v-show="type === 'line'">
           <el-form-item label="条件">
@@ -660,6 +672,7 @@ export default {
   },
   data() {
     return {
+      evaluateNode:{},
       foid: '',
       robotNameNode: {
         url: 'http://127.0.0.1'
@@ -973,7 +986,6 @@ export default {
           if (node.type == "begindasd") {
             this.type = 'node';
           } else {
-
             this.type = node.type;
             //调用接口，查询本次节点的属性.
             let params = {
@@ -1051,8 +1063,10 @@ export default {
                   this.robotNameNode = result.nodeList
                 }else if (node.type == "transferSipUrl") {
 
-                  this.transferSipUrl = result.nodeList
+                  this.transferSipUrl = result.nodeList;
                   this.initSipUser();
+                }else if(node.type == "evaluateNode"){
+                  this.evaluateNode = result.nodeList
                 }
               } else {
                 console.log("接口返回异常")
@@ -1115,6 +1129,14 @@ export default {
     save(val) {
       let param = {}
       switch (val) {
+        case "evaluateNode":
+          param = {
+            "foid": this.foid,
+            "id": this.node.id,
+            "sJson": this.evaluateNode,
+            "type": val
+          }
+          break;
         case "aceCode":
           param = {
             "id": this.node.id,
