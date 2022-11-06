@@ -321,7 +321,7 @@
             <el-button type="primary" icon="el-icon-video-play" @click="playMusic(groupNode.bef_music)"></el-button>
           </el-form-item>
           <el-form-item label="组信息">
-            <el-select v-model="groupNode.name" placeholder="请选择">
+            <el-select v-model="groupNode.name" clearable placeholder="请选择">
               <el-option
                 v-for="item in GroupList"
                 :key="item.svc_code"
@@ -1090,7 +1090,7 @@ export default {
                   })
                 }
               })
-            } else if (node.type == "group" || node.type=="robotName") {
+            } else if (node.type == "group") {
               //填充下拉框
               GetIVRSvc(ListP).then((result) => {
                 if (result.code == "20000") {
@@ -1098,7 +1098,8 @@ export default {
                 } else {
                   console.log("接口返回异常");
                 }
-              })
+              });
+            }else if (node.type=="robotName"){
               let robotBody = {
                 "company": fid
               }
@@ -1106,9 +1107,9 @@ export default {
                 if (result.code == "20000") {
                   this.tenantIdList = result.msg.data
                 } else {
-                  console.log("接口返回异常")
+                  console.log("机器人接口返回异常")
                 }
-              })
+              });
             }
           }
           this.node = cloneDeep(node)
