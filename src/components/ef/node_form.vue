@@ -553,7 +553,7 @@
             <el-input v-model="robotNameNode.title"></el-input>
           </el-form-item>
           <el-form-item label="机器人">
-            <el-select v-model="robotNameNode.templateId" placeholder="请选择">
+            <el-select v-model="robotNameNode.taskId" placeholder="请选择">
               <el-option
                 v-for="item in tenantIdList"
                 :key="item.taskId"
