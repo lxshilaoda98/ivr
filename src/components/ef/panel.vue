@@ -194,6 +194,7 @@
       saveIvr(){
         this.dialogFormVisible = false;
         initSaveIvr(this.ivrFrom).then((result) => {
+          console.log("result:::",result)
           if (result.code == "200") {
             this.$notify({
               title: '成功',
@@ -202,8 +203,8 @@
             });
             let url = window.location.href;
             let urls = url.split("=");
-            if (urls.length==1){
-              window.location.href= url+"?fid="+this.ivrFrom.foid;
+            if (urls.length >=1){
+              window.location.href= url+"?fid="+this.ivrFrom.foid+"&oid="+result.rowsAffected;
             }else{
               window.location.href= urls[0]+"="+this.ivrFrom.foid;
             }
@@ -239,9 +240,11 @@
       },
       getJsonData(){
         let id = this.getUrlParam('fid');
+        let oid = this.getUrlParam('oid');
         //let id = window.location.pathname.split('/')[1].toString();
         let params = {
-          "fid": id
+          "fid": id,
+          "oid":oid,
         }
         GetIvrModel(params).then((result) => {
           if (result.code == "20000") {
@@ -554,8 +557,11 @@
       //保存流程
       saveInfo(){
         let id = this.getUrlParam('fid');
+        let oid = this.getUrlParam('oid');
+
         let params = {
           "id": id,
+          "oid":oid,
           "sJson": this.data
         }
         saveModel(params).then((result) => {
