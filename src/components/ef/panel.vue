@@ -194,7 +194,6 @@
       saveIvr(){
         this.dialogFormVisible = false;
         initSaveIvr(this.ivrFrom).then((result) => {
-          console.log("result:::",result)
           if (result.code == "200") {
             this.$notify({
               title: '成功',
@@ -564,7 +563,8 @@
           "oid":oid,
           "sJson": this.data
         }
-        saveModel(params).then((result) => {
+
+        saveModel(params,this.data).then((result) => {
           if (result.code == 20000) {
             this.$notify({
               title: '成功',

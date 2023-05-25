@@ -47,11 +47,12 @@ export function SenIvrModel(query) {
 }
 
 //保存流程
-export function saveModel(query) {
+export function saveModel(query,data) {
   return request({
     url: '/IvrSave',
     method: 'post',
-    params: query
+    params: query,
+    data: data
   })
 }
 export function saveViewsType(query) {
