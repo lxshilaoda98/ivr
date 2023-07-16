@@ -1,4 +1,5 @@
-<script src="../../ace/ace.js"></script>
+<script src="../../ace/ace.js">
+</script>
 <template>
   <div>
     <div class="ef-node-form">
@@ -270,6 +271,14 @@
           </el-form-item>
           <el-form-item label="变量名">
             <el-input v-model="musicNode.globalVal" placeholder="请输入内容"></el-input>
+          </el-form-item>
+
+          <el-form-item label="满意度">
+            <el-switch
+              v-model="musicNode.Evaluate"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+            </el-switch>
           </el-form-item>
 
           <el-form-item>
