@@ -19,6 +19,13 @@ export function GetIVRSvc(query) {
     params: query
   })
 }
+export function GetIVRCOM(query) {
+  return request({
+    url: '/GetIVR',
+    method: 'get',
+    params: query
+  })
+}
 
 
 export function GetIvrModel(query) {

@@ -319,7 +319,7 @@
             </el-upload>
           </el-form-item>
           <el-form-item label="转接前">
-            <el-select v-model="groupNode.bef_music" placeholder="请选择">
+            <el-select v-model="groupNode.bef_music" placeholder="请选择" clearable>
               <el-option
                 v-for="item in groupNode.DataList"
                 :key="item.url"
@@ -336,6 +336,28 @@
                 :key="item.svc_code"
                 :label="item.svc_name"
                 :value="item.svc_code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="无坐席转接">
+            <el-select v-model="groupNode.noAgent" clearable placeholder="请选择">
+              <el-option
+                v-for="item in ivrcomList"
+                :key="item.Oid"
+                :label="item.name"
+                :value="item.Oid">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="超时转接">
+            <el-select v-model="groupNode.callTimeout" clearable placeholder="请选择">
+              <el-option
+                v-for="item in ivrcomList"
+                :key="item.Oid"
+                :label="item.name"
+                :value="item.Oid">
               </el-option>
             </el-select>
           </el-form-item>
@@ -662,7 +684,7 @@ import {
   GetIVRSvc,
   saveViewsCode,
   getViewsCode,
-  getViewsList, GetRobotList
+  getViewsList, GetRobotList, GetIVRCOM
 } from './saveApi'
 import {cloneDeep} from 'lodash'
 
@@ -718,6 +740,7 @@ export default {
       fileUploadUrl: myAppUrl.baseURL + '/file/upload',
       tenantIdList:[],
       GroupList: [],
+      ivrcomList:[],
       GoHTTPUrl: myAppUrl.baseURL + '/file/playMusic', //播放语音的地址
       Kxoptions: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#'],
       SelectCheck1: isOptions,
@@ -1108,6 +1131,11 @@ export default {
                   console.log("接口返回异常");
                 }
               });
+
+              GetIVRCOM(ListP).then((result) => {
+                this.ivrcomList = result.data
+              });
+
             }else if (node.type=="robotName"){
               let robotBody = {
                 "company": fid
