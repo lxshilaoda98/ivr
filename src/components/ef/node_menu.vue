@@ -195,6 +195,13 @@ export default {
             ico: 'el-icon-user',
             // 自定义覆盖样式
             style: {}
+          },{
+            id: '36',
+            type: 'gpt',
+            name: 'GPT',
+            ico: 'el-icon-hot-water',
+            // 自定义覆盖样式
+            style: {}
           }]
         }
       ],

@@ -340,7 +340,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="无坐席转接">
+          <el-form-item label="无坐席跳转">
             <el-select v-model="groupNode.noAgent" clearable placeholder="请选择">
               <el-option
                 v-for="item in ivrcomList"
@@ -351,7 +351,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="超时转接">
+          <el-form-item label="排队超时跳转">
             <el-select v-model="groupNode.callTimeout" clearable placeholder="请选择">
               <el-option
                 v-for="item in ivrcomList"
@@ -653,6 +653,26 @@
           </el-form-item>
         </el-form>
 
+
+        <el-form :model="gptNode" ref="dataForm" label-width="100px" v-show="type === 'gpt'">
+
+          <el-form-item label="名称">
+            <el-input v-model="gptNode.title"></el-input>
+          </el-form-item>
+
+          <el-tooltip class="item" effect="dark" content="FastGPT接口token值" placement="left">
+            <el-form-item label="token" >
+              <el-input v-model="gptNode.gpt_token"></el-input>
+            </el-form-item>
+          </el-tooltip>
+
+
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-check" @click="save('gpt')">保存</el-button>
+          </el-form-item>
+        </el-form>
+
+
       </div>
 
     </div>
@@ -794,6 +814,7 @@ export default {
       },
       transferPhone: {},
       voiceMail: {},
+      gptNode:{},
       stateList: [{
         state: 'success',
         label: '成功'
@@ -1099,6 +1120,8 @@ export default {
                   this.initSipUser();
                 }else if(node.type == "evaluateNode"){
                   this.evaluateNode = result.nodeList
+                }else if(node.type == "gpt"){
+                  this.gptNode = result.nodeList
                 }
               } else {
                 console.log("接口返回异常")
@@ -1280,6 +1303,15 @@ export default {
             "type": val
           }
           this.node.name = this.transferSipUrl.title;
+          break;
+        case "gpt":
+          param = {
+            "id": this.node.id,
+            "sJson": this.gptNode,
+            "type": val
+          }
+          this.node.name = this.gptNode.title;
+          break;
         default :
           break;
       }
