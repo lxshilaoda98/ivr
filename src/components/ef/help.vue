@@ -144,6 +144,22 @@
 
       </el-tab-pane>
 
+
+      <el-tab-pane label="可用接口">
+        <el-table
+          :data="interfaceName"
+          style="width: 100%">
+          <el-table-column
+            prop="comment"
+            label="描述"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="title"
+            label="接口地址">
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
     </el-tabs>
   </el-dialog>
 </template>
@@ -226,7 +242,11 @@ export default {
           "comment":"calleeNumber",
           "title":"被叫"
         }
-      ]
+      ],
+      interfaceName:[ {
+        "comment":"删除全局数据",
+        "title":"http://localhost:8000/delIvrGlobal?callid={UUid}"
+      },]
     }
   },
   components: {},
