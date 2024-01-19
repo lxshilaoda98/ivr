@@ -386,30 +386,73 @@
             </el-select>
           </el-form-item>
           <el-form-item label="请求参数">
-            <el-table :data="httpApiNode.dataForm.paramList" size="mini">
-              <el-table-column prop="paramkey" label="key" width="150">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.paramkey"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column prop="paramvalue" label="value">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.paramvalue"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="50">
-                <template slot-scope="scope">
-                  <el-button size="mini" type="text"
-                             @click="handleDelIcrmWorktimeoverrideEntityList(scope.$index)"
-                  >删除
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+              <el-tab-pane label="params" name="first">
+                <el-table :data="httpApiNode.dataForm.paramList" size="mini">
+                  <el-table-column prop="paramkey" label="key" width="150">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.paramkey"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="paramvalue" label="value">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.paramvalue"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作" width="50">
+                    <template slot-scope="scope">
+                      <el-button size="mini" type="text"
+                                 @click="handleDelIcrmWorktimeoverrideEntityList(scope.$index)"
+                      >删除
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <div @click="addHandleIcrmWorktimeoverrideEntityList()">
+                  <el-button type="text" icon="el-icon-plus">新增参数</el-button>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="header" name="second">
+                <el-table :data="httpApiNode.headerForm.paramList" size="mini">
+                  <el-table-column prop="paramkey" label="key" width="150">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.paramkey"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="paramvalue" label="value">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.paramvalue"></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作" width="50">
+                    <template slot-scope="scope">
+                      <el-button size="mini" type="text"
+                                 @click="handleDelIcrmWorktimeoverrideEntityListbody(scope.$index)"
+                      >删除
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <div @click="addHandleIcrmWorktimeoverrideEntityListbody()">
+                  <el-button type="text" icon="el-icon-plus">新增参数</el-button>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="body" name="third">
+                <el-input
+                  type="textarea"
+                  :rows="20"
+                  size="mini"
+                  style="width: 90%;"
+                  v-model="httpApiNode.bodyForm"
+                  placeholder="JSON格式"
+                ></el-input>
+                <el-button type="primary" @click="formatJson">Format JSON</el-button>
+              </el-tab-pane>
+            </el-tabs>
+
+
           </el-form-item>
-          <div @click="addHandleIcrmWorktimeoverrideEntityList()">
-            <el-button type="text" icon="el-icon-plus">新增参数</el-button>
-          </div>
+
           <el-form-item label="全局">
             <el-switch
               v-model="httpApiNode.globaldisplay"
@@ -723,6 +766,7 @@ export default {
   },
   data() {
     return {
+      activeName:'first',
       evaluateNode:{},
       foid: '',
       robotNameNode: {
@@ -810,7 +854,9 @@ export default {
         name: '接口调用',
         method: 'GET',
         url: 'http://127.0.0.1',
-        dataForm: {paramList: [], paramkey: '', paramvalue: ''}
+        dataForm: {paramList: [], paramkey: '', paramvalue: ''},
+        headerForm: {paramList: [], paramkey: '', paramvalue: ''},
+        bodyForm: ''
       },
       transferPhone: {},
       voiceMail: {},
@@ -832,6 +878,18 @@ export default {
     }
   },
   methods: {
+    formatJson() {
+      try {
+        const parsedJson = JSON.parse(this.httpApiNode.bodyForm);
+        this.httpApiNode.bodyForm = JSON.stringify(parsedJson, null, 2);
+      } catch (error) {
+        console.error('Invalid JSON:', error.message);
+        this.httpApiNode.bodyForm = null;
+      }
+    },
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
     initSipUser(){
         if (this.transferSipUrl.callType=="呼叫串"){
           this.transferSipUrlvis.sipurl = true;
@@ -956,8 +1014,18 @@ export default {
     handleDelIcrmWorktimeoverrideEntityList(index) {
       this.httpApiNode.dataForm.paramList.splice(index, 1)
     },
+    handleDelIcrmWorktimeoverrideEntityListbody(index) {
+      this.httpApiNode.headerForm.paramList.splice(index, 1)
+    },
     handleDelIcrmBegin(index) {
       this.begin.dataForm.paramList.splice(index, 1)
+    },
+    addHandleIcrmWorktimeoverrideEntityListbody() {
+      let item = {
+        paramkey: undefined,
+        paramvalue: undefined,
+      }
+      this.httpApiNode.headerForm.paramList.push(item);
     },
     addHandleIcrmWorktimeoverrideEntityList() {
       let item = {
@@ -1247,12 +1315,16 @@ export default {
           this.node.name = this.groupNode.Title;
           break;
         case "httpApi":
+          // if (this.httpApiNode.bodyForm !==""){
+          //   this.httpApiNode.bodyForm = this.httpApiNode.bodyForm.replace(/\n/g, '');
+          // }
           param = {
             "name": this.httpApiNode.name,
             "id": this.node.id,
             "sJson": this.httpApiNode,
             "type": val
           }
+
           this.node.name = this.httpApiNode.name;
           break;
         case "transferPhone":
@@ -1315,6 +1387,7 @@ export default {
         default :
           break;
       }
+
       saveViewsType(param).then((result) => {
         if (result.code == "20000") {
           this.$notify({
