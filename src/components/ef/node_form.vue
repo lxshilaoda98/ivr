@@ -890,20 +890,20 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     },
-    initSipUser(){
-        if (this.transferSipUrl.callType=="呼叫串"){
-          this.transferSipUrlvis.sipurl = true;
-          this.transferSipUrlvis.gateway = false;
-        }else if (this.transferSipUrl.callType =="网关"){
-          this.transferSipUrlvis.sipurl = false;
-          this.transferSipUrlvis.gateway = true;
-        }
-    },
-    transferSipUrlChange(val){
-      if (val =="呼叫串"){
+    initSipUser() {
+      if (this.transferSipUrl.callType == "呼叫串") {
         this.transferSipUrlvis.sipurl = true;
         this.transferSipUrlvis.gateway = false;
-      }else if (val =="网关"){
+      } else if (this.transferSipUrl.callType == "网关") {
+        this.transferSipUrlvis.sipurl = false;
+        this.transferSipUrlvis.gateway = true;
+      }
+    },
+    transferSipUrlChange(val) {
+      if (val == "呼叫串") {
+        this.transferSipUrlvis.sipurl = true;
+        this.transferSipUrlvis.gateway = false;
+      } else if (val == "网关") {
         this.transferSipUrlvis.sipurl = false;
         this.transferSipUrlvis.gateway = true;
       }
@@ -1045,10 +1045,12 @@ export default {
     dwSuccess(response, file) {
       //成功后修改数据库存储的数据
       if (response.code == 0) {
+        response.data.ucid = file.uid
         let params = {
           "id": this.node.id,
           "sJson": response.data,
           "fid": file.uid,
+          "foid": this.foid,
         }
         SaveFile(params).then((result) => {
           if (result.code == "20000") {
@@ -1062,7 +1064,9 @@ export default {
     //移除文件方法
     rmSuccess(file) {
       let params = {
-        "fid": file.uid
+        "id": this.node.id,
+        "fid": file.uid,
+        "foid": this.foid,
       }
       RmFile(params).then((result) => {
         if (result.code == "20000") {
@@ -1179,16 +1183,16 @@ export default {
                 } else if (node.type == "transferNode") {
                   //请求url返回结果getViewsList
                   this.transferNode = result.nodeList
-                }else if (node.type == "robotName") {
+                } else if (node.type == "robotName") {
                   //请求url返回结果getViewsList
                   this.robotNameNode = result.nodeList
-                }else if (node.type == "transferSipUrl") {
+                } else if (node.type == "transferSipUrl") {
 
                   this.transferSipUrl = result.nodeList;
                   this.initSipUser();
-                }else if(node.type == "evaluateNode"){
+                } else if (node.type == "evaluateNode") {
                   this.evaluateNode = result.nodeList
-                }else if(node.type == "gpt"){
+                } else if (node.type == "gpt") {
                   this.gptNode = result.nodeList
                 }
               } else {
@@ -1199,7 +1203,7 @@ export default {
             let ListP = {
               foid: fid
             }
-            console.log("node.type>>"+node.type)
+            console.log("node.type>>" + node.type)
             if (node.type == "transferNode") {
               getViewsList(ListP).then((result) => {
                 if (result.code == "20000") {
@@ -1227,7 +1231,7 @@ export default {
                 this.ivrcomList = result.data
               });
 
-            }else if (node.type=="robotName"){
+            } else if (node.type == "robotName") {
               let robotBody = {
                 "company": fid
               }
@@ -1268,6 +1272,7 @@ export default {
           break;
         case "aceCode":
           param = {
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.aceCodeNode,
             "type": val
@@ -1284,6 +1289,7 @@ export default {
           break;
         case "offTime":
           param = {
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.offTimeNode,
             "type": val
@@ -1292,6 +1298,7 @@ export default {
           break;
         case "music":
           param = {
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.musicNode,
             "type": val
@@ -1300,6 +1307,7 @@ export default {
           break;
         case "agent":
           param = {
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.agentNode,
             "type": val
@@ -1308,6 +1316,7 @@ export default {
           break;
         case "group":
           param = {
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.groupNode,
             "type": val
@@ -1319,6 +1328,7 @@ export default {
           //   this.httpApiNode.bodyForm = this.httpApiNode.bodyForm.replace(/\n/g, '');
           // }
           param = {
+            "foid": this.foid,
             "name": this.httpApiNode.name,
             "id": this.node.id,
             "sJson": this.httpApiNode,
@@ -1329,6 +1339,7 @@ export default {
           break;
         case "transferPhone":
           param = {
+            "foid": this.foid,
             "name": this.transferPhone.name,
             "id": this.node.id,
             "sJson": this.transferPhone,
@@ -1338,6 +1349,7 @@ export default {
           break;
         case "voiceMail":
           param = {
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.voiceMail,
             "type": val
@@ -1346,6 +1358,7 @@ export default {
           break;
         case "musicT":
           param = {
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.musicTNode,
             "type": val
@@ -1354,6 +1367,7 @@ export default {
           break;
         case "transferNode":
           param = {
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.transferNode,
             "type": val
@@ -1362,6 +1376,7 @@ export default {
           break;
         case "robotName":
           param = {
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.robotNameNode,
             "type": val
@@ -1370,6 +1385,7 @@ export default {
           break;
         case "transferSipUrl":
           param = {
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.transferSipUrl,
             "type": val
@@ -1378,6 +1394,7 @@ export default {
           break;
         case "gpt":
           param = {
+            "foid": this.foid,
             "id": this.node.id,
             "sJson": this.gptNode,
             "type": val
