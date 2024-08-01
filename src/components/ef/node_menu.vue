@@ -60,14 +60,16 @@ export default {
               ico: 'el-icon-time',
               // 自定义覆盖样式
               style: {}
-            },{
-              id: '36',
-              type: 'evaluateNode',
-              name: '满意度开始',
-              ico: 'el-icon-coordinate',
-              // 自定义覆盖样式
-              style: {}
             }
+            // ,{
+            //   id: '36',
+            //   type: 'evaluateNode',
+            //   name: '满意度开始',
+            //   ico: 'el-icon-coordinate',
+            //   // 自定义覆盖样式
+            //   style: {
+            //   }
+            // }
           ]
         },
         {
@@ -102,14 +104,14 @@ export default {
           ico: 'el-icon-video-pause',
           open: true,
           children: [
-            {
-              id: '13',
-              type: 'transferSipUrl',
-              name: '转外部',
-              ico: 'el-icon-share',
-              // 自定义覆盖样式
-              style: {}
-            },
+            // {
+            //   id: '13',
+            //   type: 'transferSipUrl',
+            //   name: '转外部',
+            //   ico: 'el-icon-share',
+            //   // 自定义覆盖样式
+            //   style: {}
+            // },
              {
               id: '14',
               type: 'agent',
@@ -117,29 +119,31 @@ export default {
               ico: 'el-icon-user',
               // 自定义覆盖样式
               style: {}
-            },
-            {
-              id: '15',
-              type: 'group',
-              name: '转组',
-              ico: 'el-icon-files',
-              // 自定义覆盖样式
-              style: {}
-            }, {
-              id: '16',
-              type: 'transferPhone',
-              name: '转手机',
-              ico: 'el-icon-mobile-phone',
-              // 自定义覆盖样式
-              style: {}
-            }, {
-              id: '17',
-              type: 'voiceMail',
-              name: '转留言',
-              ico: 'el-icon-message',
-              // 自定义覆盖样式
-              style: {}
             }
+            // {
+            //   id: '15',
+            //   type: 'group',
+            //   name: '转组',
+            //   ico: 'el-icon-files',
+            //   // 自定义覆盖样式
+            //   style: {}
+            // }
+            // {
+            //   id: '16',
+            //   type: 'transferPhone',
+            //   name: '转手机',
+            //   ico: 'el-icon-mobile-phone',
+            //   // 自定义覆盖样式
+            //   style: {}
+            // },
+            // {
+            //   id: '17',
+            //   type: 'voiceMail',
+            //   name: '转留言',
+            //   ico: 'el-icon-message',
+            //   // 自定义覆盖样式
+            //   style: {}
+            // }
 
           ]
         },
@@ -148,7 +152,7 @@ export default {
           type: 'group',
           name: '自定义节点',
           ico: 'el-icon-video-pause',
-          open: true,
+          open: false,
           children: [
              {
               id: '31',
@@ -157,14 +161,7 @@ export default {
               ico: 'el-icon-sort',
               // 自定义覆盖样式
               style: {}
-            },{
-              id: '32',
-              type: 'flowEnd',
-              name: '流程结束',
-              ico: 'el-icon-circle-close',
-              // 自定义覆盖样式
-              style: {}
-            },{
+            } ,{
               id: '33',
               type: 'transferNode',
               name: '虚拟跳转',
@@ -182,28 +179,28 @@ export default {
 
           ]
         },
-        {
-          id: '5',
-          type: 'intelligent',
-          name: '智能节点',
-          ico: 'el-icon-magic-stick',
-          open: true,
-          children: [{
-            id: '35',
-            type: 'robotName',
-            name: '智能机器人',
-            ico: 'el-icon-user',
-            // 自定义覆盖样式
-            style: {}
-          },{
-            id: '36',
-            type: 'gpt',
-            name: 'GPT',
-            ico: 'el-icon-hot-water',
-            // 自定义覆盖样式
-            style: {}
-          }]
-        }
+        // {
+        //   id: '5',
+        //   type: 'intelligent',
+        //   name: '智能节点',
+        //   ico: 'el-icon-magic-stick',
+        //   open: false,
+        //   children: [{
+        //     id: '35',
+        //     type: 'robotName',
+        //     name: '智能机器人',
+        //     ico: 'el-icon-user',
+        //     // 自定义覆盖样式
+        //     style: {}
+        //   },{
+        //     id: '36',
+        //     type: 'gpt',
+        //     name: 'GPT',
+        //     ico: 'el-icon-hot-water',
+        //     // 自定义覆盖样式
+        //     style: {}
+        //   }]
+        // }
       ],
       nodeMenu: {}
     }

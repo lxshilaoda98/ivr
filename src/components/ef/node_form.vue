@@ -910,9 +910,10 @@ export default {
     },
     writerCode() {
       this.dialogVisible = true;
-      console.log("node" + this.node.id)
+      console.log("node" + this.node.id+this.getUrlParam('fid'))
       let params = {
-        id: this.node.id
+        id: this.node.id,
+        fid: this.getUrlParam('fid')
       }
       getViewsCode(params).then((result) => {
         if (result.code == "20000") {
@@ -928,8 +929,10 @@ export default {
       })
     },
     saveCode() {
+      let foid = this.getUrlParam('fid');
       let param = {
         id: this.node.id,
+        foid: foid,
         code: this.aceCodeNode.code
       }
       saveViewsCode(param).then((result) => {

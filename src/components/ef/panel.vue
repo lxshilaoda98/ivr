@@ -104,8 +104,9 @@
   import {getDataD} from './data_D'
   import {getDataE} from './data_E'
   import {ForceDirected} from './force-directed'
+  import request from './request_utils'
 
-  import {saveModel, GetIvrModel,SenIvrModel,initSaveIvr} from './saveApi'
+  import {saveModel, GetIvrModel, SenIvrModel, initSaveIvr, downloadIvrFile} from './saveApi'
 
   export default {
     data() {
@@ -678,21 +679,7 @@
       },
       // 下载数据
       downloadData() {
-        this.$confirm('确定要下载该流程数据吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          closeOnClickModal: false
-        }).then(() => {
-          var datastr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.data, null, '\t'));
-          var downloadAnchorNode = document.createElement('a')
-          downloadAnchorNode.setAttribute("href", datastr);
-          downloadAnchorNode.setAttribute("download", 'data.json')
-          downloadAnchorNode.click();
-          downloadAnchorNode.remove();
-          this.$message.success("正在下载中,请稍后...")
-        }).catch(() => {
-        })
+        window.open(window.appConig.baseURL+'/download_ivr?fid='+this.getUrlParam('fid'), '_blank')
       }
     }
   }
